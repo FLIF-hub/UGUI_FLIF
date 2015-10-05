@@ -1,2 +1,63 @@
 
 // App specific styles
+
+
+
+// Window styles
+
+//*::-webkit-scrollbar-track
+//    border-radius: 10px
+//    background: #FFF
+//
+//*::-webkit-scrollbar
+//    width: 12px
+//    background-color: #FFF
+//
+//*::-webkit-scrollbar-thumb
+//    border-radius: 10px
+//    background-color: #008CBA
+//
+//html
+//    border: 2px solid #008CBA
+
+
+
+/* Navigation */
+
+.dragon
+    -webkit-app-region: drag
+
+.dragoff
+    -webkit-app-region: no-drag
+
+.navIcons
+    float: right
+    margin-right: 17px
+    a
+        line-height: 21px
+        padding: 19.5px 13.5px
+        color: #FFF
+        font-size: 15px
+        text-decoration: none
+        &:hover
+            color: #375A7F
+
+
+
+/* Basic App Styles */
+
+.outputContainer img
+    max-width: 100%
+    margin: 0px auto 10px auto
+
+.spinner
+    display: block
+    height: 28px
+
+
+
+/* Media Queries */
+
+@media (min-width: 768px)
+    .navIcons
+        display: none
