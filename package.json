@@ -1,7 +1,7 @@
 {
     "name": "ugui_flif",                                   // "birds_with_arms" Make this URL and Filepath safe
     "main": "index.htm",                                   // The default page that is displayed on launch
-    "version": "0.2.0",                                    // MAJOR.MINOR.PATCH more info: semver.org
+    "version": "0.3.0",                                    // MAJOR.MINOR.PATCH more info: semver.org
     "author": "The Jared Wilcurt",                         // Put your name or your team's name here, this is dynamically placed in the about section of your app
     "description": "Free Lossless Image Format",           // "Put human arms on pictures of birds!"
     "keywords": [ "image", "compression", "lossless" ],    // "birds", "arms", "novelty", "humor", "serious internet business"
@@ -22,7 +22,7 @@
         "always-on-top": false,      // Whether the window should always stay on top of other windows
         "show_in_taskbar": true,     // Whether the window is shown in taskbar or dock
         "fullscreen": false,         // Whether window is fullscreen
-        "frame": true,              // false to make the window frameless, however you'll need to add in an exit button and window dragging (advanced)
+        "frame": false,              // false to make the window frameless, however you'll need to add in an exit button and window dragging (advanced)
         "as_desktop": false          // Show as desktop background window under X11 environment
     },
     "nodejs": true,                  // UGUI requies Node support in WebKit, so this must stay set to true

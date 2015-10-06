@@ -6,9 +6,9 @@ $(document).ready( runApp );
 function runApp() {
 
 
-    //Require in the File System
     var fs = require('fs');
     var gui = require("nw.gui");
+    var win = gui.Window.get();
     var errorMsg =
       '<h4 class="text-danger text-center"><strong>There was an error.</strong></h4>' +
       '<div class="text-warning text-center">Make sure you are using one of these file types:<br />' +
@@ -106,7 +106,7 @@ function runApp() {
     function isPng() {
 
         $(".outputContainer").html(
-            '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center">' +
+            '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center text-primary">' +
               '<img src="_img/spinner.svg" alt="Processing" class="spinner" />' +
               'Processing' +
             '</div>'
@@ -146,7 +146,7 @@ function runApp() {
                               '<td>' + flifSize + ' bytes</td>' +
                             '</tr>' +
                             '<tr>' +
-                              '<th>Savings</th>' +
+                              '<th></th>' +
                               '<td>' + percent  + '% of original</td>' +
                               '<td>' + bytesSaved + ' bytes saved</td>' +
                             '</tr>' +
@@ -170,6 +170,50 @@ function runApp() {
         ugui.helpers.runcmdAdvanced(parameters);
     }
 
+
+    function checkForUpdates() {
+        $.get("https://api.github.com/repos/TheJaredWilcurt/UGUI_FLIF/releases", function(data){
+
+            //0.2.0
+            var remoteVersion = data[0].tag_name.split("v")[1];
+            var localVersion = ugui.app.version;
+            //[ "0", "2", "0" ]
+            var remoteVersionSplit = remoteVersion.split(".");
+            var localVersionSplit = localVersion.split(".");
+            var rvs = remoteVersionSplit;
+            var lvs = localVersionSplit;
+            //Check if the Major, Minor, or Patch have been updated on the remote
+            if (
+                 (rvs[0] > lvs[0]) ||
+                 (rvs[0] == lvs[0] && rvs[1] > lvs[1]) ||
+                 (rvs[0] == lvs[0] && rvs[1] == lvs[1] && rvs[2] > lvs[2])
+               ) {
+                $(".updateResults").html(
+                    '<p>' +
+                      'Update found! ' +
+                      '<a href="' + data[0].assets[0].browser_download_url + '" class="external-link">Download ZIP</a> or ' +
+                      '<a href="' + data[0].html_url + '" class="external-link">view release notes</a>.' +
+                    '</p>'
+                );
+                ugui.helpers.openDefaultBrowser();
+            } else {
+                $(".updateResults").html('<p>You have the latest version of UGUI: FLIF.</p>');
+            }
+        });
+    }
+
+    $("#updateChecker").click(checkForUpdates);
+
+
+
+    function setContentHeight() {
+        var navHeight = $(".navbar").height();
+        //Window height - Navbar - bottom border
+        var newHeight = win.height - navHeight - 2;
+        $("#appHolder").css("height", newHeight + "px");
+    }
+
+    win.on("resize", setContentHeight );
 
 
 

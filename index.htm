@@ -73,7 +73,7 @@
           </div>
           <a class="navbar-brand">
             <img src="_img/logo.png" alt="FLIF Logo" />
-            <span class="applicationName">UGUI: FLIF</span>
+            <span class="applicationName" title="Universal GUI: Free Lossless Image Format">UGUI: FLIF</span>
           </a>
         </div>
         <div class="navbar-collapse collapse">
@@ -102,12 +102,11 @@
         /////////////////////////////////////////////////////////////////
       -->
 
-    <div class="container" role="main">
+    <div id="appHolder" class="container" role="main">
 
       <header>
         <h3>
-          <span class="applicationTitle">UGUI: FLIF</span>
-          <small class="applicationDescription">Short description or tagline</small>
+          <small>Preview and Convert FLIF files.</small>
         </h3>
       </header>
 
@@ -252,7 +251,7 @@
 
               <div class="panel panel-primary">
                 <div class="panel-heading">
-                  <span class="pull-right versionApp" title="Version">V0.2.0</span>
+                  <span class="pull-right versionApp" title="Version">V0.3.0</span>
                   <h3 class="panel-title">About <span class="applicationTitle">UGUI: FLIF</span></h3>
                 </div>
                 <div class="panel-body">
@@ -260,7 +259,11 @@
                     This is a GUI that allows you to preview, encode, and decode .flif files.
                   </p>
                   <p>
-                    <span class="applicationTitle">UGUI: FLIF</span> is created by <span class="authorName">The Jared Wilcurt</span> and uses version 0.1 of the CLI version of FLIF found here: <a href="http://flif.info" class="external-link">FLIF.info</a>.
+                    <a href="http://github.com/TheJaredWilcurt/UGUI_FLIF" class="external-link applicationTitle">UGUI: FLIF</a> is created by <a href="http://github.com/TheJaredWilcurt" class="authorName external-link">The Jared Wilcurt</a> and uses version 0.1 of the CLI version of FLIF found here: <a href="http://flif.info" class="external-link">FLIF.info</a>.
+                  </p>
+                  <p class="updateResults"></p>
+                  <p class="text-center">
+                    <button id="updateChecker" class="btn btn-primary">Check for updates</button>
                   </p>
                 </div>
               </div>

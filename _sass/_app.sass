@@ -5,20 +5,23 @@
 
 // Window styles
 
-//*::-webkit-scrollbar-track
-//    border-radius: 10px
-//    background: #FFF
-//
-//*::-webkit-scrollbar
-//    width: 12px
-//    background-color: #FFF
-//
-//*::-webkit-scrollbar-thumb
-//    border-radius: 10px
-//    background-color: #008CBA
-//
-//html
-//    border: 2px solid #008CBA
+*::-webkit-scrollbar-track
+    border-radius: 0px
+    background: #F0F0F0
+
+*::-webkit-scrollbar
+    width: 12px
+    background-color: #FFF
+
+*::-webkit-scrollbar-thumb
+    border-radius: 0px
+    background-color: #5BC0DE
+
+html
+    border: 2px solid #008CBA
+
+body
+    overflow: hidden
 
 
 
@@ -46,6 +49,10 @@
 
 /* Basic App Styles */
 
+.navbar .applicationName
+    position: relative
+    top: 4px
+
 .outputContainer img
     max-width: 100%
     margin: 0px auto 10px auto
@@ -54,6 +61,10 @@
     display: block
     height: 28px
 
+#appHolder
+    height: 418px
+    margin-top: 1px
+    overflow: auto
 
 
 /* Media Queries */
