@@ -6,11 +6,11 @@ This is a GUI for the Free Lossless Image Format that allows for encoding and de
 
 Download **UGUI: FLIF** here:
 
-* https://github.com/TheJaredWilcurt/UGUI_FLIF/releases
+* https://github.com/FLIF-Hub/UGUI_FLIF/releases
 
 * * *
 
 **Links:**
 
 * [FLIF official website](http://flif.info)
-* [FLIF on GitHub](https://github.com/jonsneyers/FLIF)
+* [FLIF on GitHub](https://github.com/FLIF-Hub/FLIF)
