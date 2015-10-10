@@ -211,11 +211,47 @@ function runApp() {
         //Window height - Navbar - bottom border
         var newHeight = win.height - navHeight - 2;
         $("#appHolder").css("height", newHeight + "px");
+        window.setTimeout(ugui.helpers.centerNavLogo, 71);
     }
 
     win.on("resize", setContentHeight );
 
 
+/*
+    $("#repeats").slider({
+        min: 0,
+        max: 1000,
+        scale: 'logarithmic',
+        step: 1,
+        value: 3
+    });
+*/
+    $("#ex15").slider({
+        min: 10,
+        max: 1000,
+        scale: 'logarithmic',
+        step: 10
+    });
+
+
+    //Clicking "About" in the Nav Bar
+    $('.navbar a[href="#settings"]').click( function() {
+        //Show the modal
+        $("#settingsModal").fadeIn("slow");
+    });
+
+    //Remove modal, enable scrollbar
+    function removeModal() {
+        $("#settingsModal").slideUp("slow");
+    }
+
+    //When clicking on background or X, remove modal
+    $("#settingsModal").click( removeModal );
+    //Allow you to click in the modal without triggering the `removeModal` function called when you click its parent element
+    $("#settingsModal .modal-content").click( function( event ) {
+        event.stopPropagation();
+    });
+    $("#settingsModal .glyphicon-remove").click( removeModal );
 
 
 }// end runApp();
