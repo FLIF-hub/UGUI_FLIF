@@ -201,6 +201,24 @@
       </section>
 
 
+
+
+
+
+
+      <!--
+        /////////////////////////////////////////////////////////////////
+        //                                                             //
+        //                       SETTINGS MODAL                        //
+        //                                                             //
+        /////////////////////////////////////////////////////////////////
+        // This content is displayed when the user clicks the Gear in  //
+        // the navigation bar. It is the settings the app abides by,   //
+        // and they are auto saved when interacted with, and auto load //
+        // when the app is opened.                                     //
+        /////////////////////////////////////////////////////////////////
+      -->
+
       <div id="settingsModal" class="modal">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -219,10 +237,8 @@
                   <form id="flifSettings" role="form-inline">
                     <div class="row">
                       <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
-                        <label for="repeats">Tree Learning. More iterations increases CPU cycles, but results in better trees and thus smaller files. Default Setting is 3.</label><br />
-                        <!-- <input class="slider" type="text" id="repeats" data-argName="repeats" data-slider-id="repeatsSlider" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="3" /> -->
-                        <!-- data-slider-min="1" data-slider-max="1000" data-slider-step="1" data-slider-value="3" -->
-                        <input id="ex15" type="text" data-slider-min="1000" data-slider-max="10000000" data-slider-step="5" />
+                        <label for="repeats"><strong>Tree Learning</strong><br />More iterations increases CPU cycles, but results in better trees and thus smaller files. Default Setting is 3.</label><br />
+                        <input id="repeats" type="text" data-argName="repeats" data-slider-id="repeatsSlider" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="3" />
                       </div>
                     </div>
                   </form>

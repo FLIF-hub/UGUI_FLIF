@@ -210,29 +210,30 @@ function runApp() {
         var navHeight = $(".navbar").height();
         //Window height - Navbar - bottom border
         var newHeight = win.height - navHeight - 2;
+        var settingsHeight = 0;
+        if (win.height > 300) {
+            $("#settingsModal .modal-header").removeClass('shortScreen');
+            settingsHeight = newHeight - 74;
+        } else {
+            $("#settingsModal .modal-header").addClass('shortScreen');
+            settingsHeight = newHeight - 39;
+        }
         $("#appHolder").css("height", newHeight + "px");
+        $("#settingsModal .modal-content").css("height", newHeight + "px");
+        $("#settingsModal .modal-body").css("height", settingsHeight + "px");
         window.setTimeout(ugui.helpers.centerNavLogo, 71);
     }
 
+    setContentHeight();
     win.on("resize", setContentHeight );
 
-
-/*
     $("#repeats").slider({
         min: 0,
         max: 1000,
+        value: 3,
         scale: 'logarithmic',
-        step: 1,
-        value: 3
+        step: 1
     });
-*/
-    $("#ex15").slider({
-        min: 10,
-        max: 1000,
-        scale: 'logarithmic',
-        step: 10
-    });
-
 
     //Clicking "About" in the Nav Bar
     $('.navbar a[href="#settings"]').click( function() {
