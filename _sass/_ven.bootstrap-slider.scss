@@ -27,7 +27,7 @@ $baseBorderRadius: 4px;
     vertical-align: middle;
     position: relative;
     &.slider-horizontal {
-        width: 210px;
+        width: 100%;
         height: $baseLineHeight;
         .slider-track {
             height: $baseLineHeight/2;

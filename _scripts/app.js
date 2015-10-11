@@ -6,6 +6,12 @@ $(document).ready( runApp );
 function runApp() {
 
 
+
+    ///////////////////////////////////////////////////////
+    // IMPORTING A FILE
+
+
+    //Variables
     var fs = require('fs');
     var gui = require("nw.gui");
     var win = gui.Window.get();
@@ -15,11 +21,15 @@ function runApp() {
       '<code>.FLIF .PNG .PNM .PPM .PGM .PBM .PAM</code></div>';
 
 
+    //When the user drops an image detect if it's a FLIF or not
     $('[data-argName="fileToProcess"]').on("change", function() {
 
+        //Build the UGUI Arg Object
         ugui.helpers.buildUGUIArgObject();
+        //Detect type of file dragged in
         var filetype = ugui.args.fileToProcess.ext.toLowerCase();
 
+        //Act upon the detected filetype
         if (filetype === "flif") {
             isFlif();
         } else {
@@ -28,7 +38,7 @@ function runApp() {
 
     });
 
-
+    //Export the image based on the desired file type passed in
     function exportImage(type) {
         var input = ugui.args.fileToProcess.value;
         var output = ugui.args.fileToProcess.path + ugui.args.fileToProcess.name + ".new." + type;
@@ -38,7 +48,7 @@ function runApp() {
 
 
     function isFlif() {
-
+        //Detect OS so we use the right slashes
         var outputLocation = "";
         //If you're on windows then folders in file paths are separated with `\`, otherwise OS's use `/`
         if ( process.platform == "win32" ) {
@@ -49,7 +59,8 @@ function runApp() {
             outputLocation = (gui.App.dataPath + "/output.png");
         }
 
-        //flif.exe "C:\folder\cow.png" "C:\Users\GLR\AppData\Local\ugui_flif\output.png"
+        //Create a PNG from the imported FLIF file in a temp directory
+        //flif.exe "C:\folder\cow.png" "C:\Users\Bob\AppData\Local\ugui_flif\output.png"
         var executableAndArguments = 'flif -d --quality=100 "' + ugui.args.fileToProcess.value + '" "' + outputLocation + '"';
 
         var parameters = {
@@ -58,6 +69,7 @@ function runApp() {
                 console.log("The text from the executable: " + data);
             },
             "onExit": function(code) {
+                //When the PNG file is done being exported and flif.exe exits show it on the screen with export options
                 $(".outputContainer").html(
                     '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center">' +
                       '<h4 class="text-left">FLIF Preview</h4>' +
@@ -73,6 +85,7 @@ function runApp() {
                       '<button id="pamExport" class="btn btn-sm btn-primary">Save as PAM</button>' +
                     '</div>'
                 );
+                //If the user clicks one of the export buttons, create the export image next to the import image
                 $("#pngExport").click( function(e) {
                     e.preventDefault();
                     exportImage("png");
@@ -96,7 +109,7 @@ function runApp() {
                 console.log("Executable has closed with the exit code: " + code);
             }
         };
-
+        //Actually run the params object above
         ugui.helpers.runcmdAdvanced(parameters);
     }
 
@@ -104,7 +117,7 @@ function runApp() {
 
 
     function isPng() {
-
+        //Put a spinner and loading message on the screen while converting to flif
         $(".outputContainer").html(
             '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center text-primary">' +
               '<img src="_img/spinner.svg" alt="Processing" class="spinner" />' +
@@ -112,14 +125,16 @@ function runApp() {
             '</div>'
         );
 
+        //Variables
         var name = ugui.args.fileToProcess.name;
         var nameExt = ugui.args.fileToProcess.nameExt;
         var fullPath = ugui.args.fileToProcess.value;
         var size = ugui.args.fileToProcess.size;
         var flif = ugui.args.fileToProcess.path + name + ".flif";
+        var iterations = ugui.args.repeats.value;
 
         //flif.exe -d --quality=100 "C:\folder\cow.png" "C:\folder\cow.flif"
-        var executableAndArguments = 'flif "' + fullPath + '" "' + flif + '"';
+        var executableAndArguments = 'flif --repeats=' + iterations + ' "' + fullPath + '" "' + flif + '"';
 
         var parameters = {
             "executableAndArgs": executableAndArguments,
@@ -127,6 +142,8 @@ function runApp() {
                 console.log("The text from the executable: " + data);
             },
             "onExit": function(code) {
+                //When the FLIF file has finished being exported and the flif.exe finishes
+                //Change the loading message to have details about the sizes of the input and output
                 function updateUI() {
                     var flifSize = fs.statSync(flif.split("\\").join("/")).size;
                     var bytesSaved = size - flifSize;
@@ -166,11 +183,21 @@ function runApp() {
                 console.log("Executable has closed with the exit code: " + code);
             }
         };
-
+        //run the params above
         ugui.helpers.runcmdAdvanced(parameters);
     }
 
 
+
+
+
+    ////////////////////////////////////////////////
+    // HELP MENU
+
+
+
+
+    //When the user clicks the button in the help menu, contact Github and check for updates
     function checkForUpdates() {
         $.get("https://api.github.com/repos/TheJaredWilcurt/UGUI_FLIF/releases", function(data){
 
@@ -227,13 +254,12 @@ function runApp() {
     setContentHeight();
     win.on("resize", setContentHeight );
 
-    $("#repeats").slider({
-        min: 0,
-        max: 1000,
-        value: 3,
-        scale: 'logarithmic',
-        step: 1
-    });
+
+
+
+    ////////////////////////////////////////////////////////
+    // SETTINGS MENU
+
 
     //Clicking "About" in the Nav Bar
     $('.navbar a[href="#settings"]').click( function() {
@@ -252,7 +278,76 @@ function runApp() {
     $("#settingsModal .modal-content").click( function( event ) {
         event.stopPropagation();
     });
+
     $("#settingsModal .glyphicon-remove").click( removeModal );
+
+
+
+    /////////////////////////////////////////////////////////
+    // SETTINGS UI ELEMENTS
+
+
+    $("#repeats").slider({
+        min: 0,
+        max: 1000,
+        value: $("#repeats").val() || 3,
+        scale: 'logarithmic',
+        step: 1
+    });
+
+    $("#sliderSwitcher").click(function (event) {
+        event.stopPropagation();
+        if ($("#sliderSwitcher").hasClass("auto")) {
+            $("#repeats").slider("destroy");
+            $("#sliderSwitcher").removeClass("auto");
+            $("#sliderSwitcher").addClass("manual");
+            $("#sliderSwitcher").html("Slider");
+            $("#repeats").keypress(function (event) {
+                //if what was typed isn't a number then don't put it in the box
+                if (event.which != 8 && event.which != 0 && (event.which < 48 || event.which > 57)) {
+                    return false;
+                }
+            });
+            $("#repeats").keyup(function (event) {
+                //If the value is less than 1, set it to 1
+                if ($("#repeats").val() < 1) {
+                    $("#repeats").val(1);
+                //if the value is greater than 1000, set it to 1000
+                } else if ($("#repeats").val() > 1000) {
+                    $("#repeats").val(1000);
+                }
+            });
+        } else {
+            var repeatsValue = parseInt($("#repeats").val() || 3);
+            var repeatsOptions = {
+                min: 0,
+                max: 1000,
+                value: repeatsValue,
+                scale: 'logarithmic',
+                step: 1
+            };
+            $("#repeats").slider(repeatsOptions);
+            $("#sliderSwitcher").removeClass("manual");
+            $("#sliderSwitcher").addClass("auto");
+            $("#sliderSwitcher").html("Manual");
+        }
+    });
+
+
+
+/*
+
+   -i, --interlace      interlacing (default, except for tiny images)
+   -n, --no-interlace   force no interlacing
+   -a, --acb            force auto color buckets (ACB)
+   -b, --no-acb         force no auto color buckets
+   -p, --palette=P      max palette size=P (default: P=512)
+   -r, --repeats=N      N repeats for MANIAC learning (default: N=3)
+
+
+*/
+
+
 
 
 }// end runApp();
