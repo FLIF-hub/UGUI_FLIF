@@ -11,6 +11,8 @@ function runApp() {
     ugui.helpers.loadSettings();
 
 
+
+
     ///////////////////////////////////////////////////////
     // IMPORTING A FILE
 
@@ -19,13 +21,35 @@ function runApp() {
     var fs = require('fs');
     var gui = require("nw.gui");
     var win = gui.Window.get();
+    var OS = process.platform;
+    var flif = "executables\\win\\flif.exe";
+    var convert = "executables\\win\\convert64.exe";
+    //Detect if in `darwin`, `freebsd`, `linux`, `sunos`, or `win32`
+    if ( OS == "win32" ) {
+        flif = "executables\\win\\flif.exe";
+        if (process.arch == "x64") {
+            convert = "executables\\win\\convert64.exe";
+        } else {
+            convert = "executables\\win\\convert32.exe";
+        }
+    } else if ( OS == "darwin" ) {
+        flif = "executables/osx/flif";
+        convert = "executables/osx/convert64";
+    } else {
+        flif = "executables/lin/flif";
+        if (process.arch == "x64") {
+            convert = "executables/lin/convert64.exe";
+        } else {
+            convert = "executables/lin/convert32.exe";
+        }
+    }
     var errorMsg =
       '<h4 class="text-danger text-center"><strong>There was an error.</strong></h4>' +
       '<div class="text-warning text-center">Make sure you are using one of these file types:<br />' +
       '<code>.FLIF .PNG .PNM .PPM .PGM .PBM .PAM</code></div>';
     var originalSettings = "";
     //If you're on windows then folders in file paths are separated with `\`, otherwise OS's use `/`
-    if ( process.platform == "win32" ) {
+    if ( OS == "win32" ) {
         originalSettings = (gui.App.dataPath + "\\originalsettings.json");
     } else {
         originalSettings = (gui.App.dataPath + "/originalsettings.json");
@@ -53,7 +77,7 @@ function runApp() {
     function exportImage(type) {
         var input = ugui.args.fileToProcess.value;
         var output = ugui.args.fileToProcess.path + ugui.args.fileToProcess.name + ".new." + type;
-        var executableAndArguments = 'flif -d --quality=100 "' + input + '" "' + output + '"';
+        var executableAndArguments = flif + ' -d --quality=100 "' + input + '" "' + output + '"';
         ugui.helpers.runcmd(executableAndArguments);
     }
 
@@ -62,7 +86,7 @@ function runApp() {
         //Detect OS so we use the right slashes
         var outputLocation = "";
         //If you're on windows then folders in file paths are separated with `\`, otherwise OS's use `/`
-        if ( process.platform == "win32" ) {
+        if ( OS == "win32" ) {
             //Find the path to the settings file and store it
             outputLocation = (gui.App.dataPath + "\\output.png");
         } else {
@@ -72,7 +96,7 @@ function runApp() {
 
         //Create a PNG from the imported FLIF file in a temp directory
         //flif.exe "C:\folder\cow.png" "C:\Users\Bob\AppData\Local\ugui_flif\output.png"
-        var executableAndArguments = 'flif -d --quality=100 "' + ugui.args.fileToProcess.value + '" "' + outputLocation + '"';
+        var executableAndArguments = flif + ' -d --quality=100 "' + ugui.args.fileToProcess.value + '" "' + outputLocation + '"';
 
         var parameters = {
             "executableAndArgs": executableAndArguments,
@@ -141,11 +165,11 @@ function runApp() {
         var nameExt = ugui.args.fileToProcess.nameExt;
         var fullPath = ugui.args.fileToProcess.value;
         var size = ugui.args.fileToProcess.size;
-        var flif = ugui.args.fileToProcess.path + name + ".flif";
+        var inputFlif = ugui.args.fileToProcess.path + name + ".flif";
         var iterations = ugui.args.repeats.value;
 
         //flif.exe -d --quality=100 "C:\folder\cow.png" "C:\folder\cow.flif"
-        var executableAndArguments = 'flif --repeats=' + iterations + ' "' + fullPath + '" "' + flif + '"';
+        var executableAndArguments = flif + ' --repeats=' + iterations + ' "' + fullPath + '" "' + inputFlif + '"';
 
         var parameters = {
             "executableAndArgs": executableAndArguments,
@@ -156,7 +180,7 @@ function runApp() {
                 //When the FLIF file has finished being exported and the flif.exe finishes
                 //Change the loading message to have details about the sizes of the input and output
                 function updateUI() {
-                    var flifSize = fs.statSync(flif.split("\\").join("/")).size;
+                    var flifSize = fs.statSync(inputFlif.split("\\").join("/")).size;
                     var bytesSaved = size - flifSize;
                     var percent = Math.floor((flifSize / size) * 10000) / 100;
                     $(".outputContainer").html(
@@ -297,7 +321,7 @@ function runApp() {
     $("#repeats").slider({
         min: 0,
         max: 1000,
-        value: $("#repeats").val() || 3,
+        value: parseInt($("#repeats").val()) || 3,
         scale: 'logarithmic',
         step: 1
     });
@@ -339,6 +363,8 @@ function runApp() {
             $("#sliderSwitcher").html("Manual");
         }
     });
+
+
 
 
 
@@ -428,6 +454,11 @@ function runApp() {
 */
 
 
-
+    //Force the Slider to update and display the correct value
+    function clickSliderSwitcher() {
+        $("#sliderSwitcher").trigger("click");
+    }
+    setTimeout(clickSliderSwitcher, 250);
+    setTimeout(clickSliderSwitcher, 500);
 
 }// end runApp();
