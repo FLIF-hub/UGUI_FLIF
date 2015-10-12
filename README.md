@@ -12,9 +12,9 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 ###Screenshots and Download
 
-Download the latest copy of **UGUI: FLIF** here:
+* https://github.com/FLIF-Hub/UGUI_FLIF/releases
 
-* https://github.com/TheJaredWilcurt/UGUI_FLIF/releases
+<p align="center"><a href="http://github.com/FLIF-Hub/UGUI_Flif/releases"><img src="http://i.imgur.com/mt80RRZ.gif" alt="Screenshot" /></a></p>
 
 * * *
 
@@ -35,4 +35,4 @@ New features we'd like to see added in the future:
 ###Links:
 
 * [FLIF official website](http://flif.info)
-* [FLIF on GitHub](https://github.com/jonsneyers/FLIF)
+* [FLIF on GitHub](https://github.com/FLIF-Hub/FLIF)
