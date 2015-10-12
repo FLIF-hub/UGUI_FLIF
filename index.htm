@@ -223,7 +223,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <span class="glyphicon glyphicon-remove pull-right" data-dismiss="modal" aria-hidden="true"></span>
+              <span class="glyphicon glyphicon-remove pull-right" data-dismiss="modal" aria-hidden="true" title="Cancel, use previous settings."></span>
               <h4>UGUI: FLIF Settings</h4>
             </div>
             <div class="modal-body">
@@ -272,6 +272,11 @@
                 </div>
               </div>
 
+              <div class="text-right">
+                <button id="settingsDefaults" class="btn btn-primary" title="Load the default settings.">Defaults</button>
+                <button id="settingsCancel"   class="btn btn-danger"  title="Use previous settings.">Cancel</button>
+                <button id="settingsSave"     class="btn btn-success" title="Keep these settings.">Save</button>
+              </div>
 
             </div>
           </div>
@@ -314,7 +319,7 @@
                     This is a GUI that allows you to preview, encode, and decode .flif files.
                   </p>
                   <p>
-                    <a href="http://github.com/TheJaredWilcurt/UGUI_FLIF" class="external-link applicationTitle">UGUI: FLIF</a> is created by <a href="http://github.com/TheJaredWilcurt" class="authorName external-link">The Jared Wilcurt</a> and uses version 0.1 of the CLI version of FLIF found here: <a href="http://flif.info" class="external-link">FLIF.info</a>. FLIF is ©2010-2015 J. Sneyers &amp; P. Wuille, GNU GPL v3
+                    <a href="http://github.com/TheJaredWilcurt/UGUI_FLIF" class="external-link applicationTitle">UGUI: FLIF</a> is created by <a href="http://github.com/TheJaredWilcurt" class="authorName external-link">The Jared Wilcurt</a> and uses version 0.1 of the CLI version of FLIF found here: <a href="http://flif.info" class="external-link">FLIF.info</a>. FLIF is &copy;2010-2015 J. Sneyers &amp; P. Wuille, GNU GPL v3
                   </p>
                   <p class="updateResults"></p>
                   <p class="text-center">

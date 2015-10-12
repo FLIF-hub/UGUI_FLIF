@@ -7,6 +7,10 @@ function runApp() {
 
 
 
+    //Load settings if any were saved previously
+    ugui.helpers.loadSettings();
+
+
     ///////////////////////////////////////////////////////
     // IMPORTING A FILE
 
@@ -19,6 +23,13 @@ function runApp() {
       '<h4 class="text-danger text-center"><strong>There was an error.</strong></h4>' +
       '<div class="text-warning text-center">Make sure you are using one of these file types:<br />' +
       '<code>.FLIF .PNG .PNM .PPM .PGM .PBM .PAM</code></div>';
+    var originalSettings = "";
+    //If you're on windows then folders in file paths are separated with `\`, otherwise OS's use `/`
+    if ( process.platform == "win32" ) {
+        originalSettings = (gui.App.dataPath + "\\originalsettings.json");
+    } else {
+        originalSettings = (gui.App.dataPath + "/originalsettings.json");
+    }
 
 
     //When the user drops an image detect if it's a FLIF or not
@@ -262,24 +273,20 @@ function runApp() {
 
 
     //Clicking "About" in the Nav Bar
-    $('.navbar a[href="#settings"]').click( function() {
+    $('.navbar a[href="#settings"]').click( function (event) {
+        event.stopPropagation();
         //Show the modal
         $("#settingsModal").fadeIn("slow");
+
+        ugui.helpers.buildUGUIArgObject();
+        //Store a copy of the current settings before the user does anything
+        ugui.helpers.saveSettings(originalSettings);
     });
 
     //Remove modal, enable scrollbar
     function removeModal() {
         $("#settingsModal").slideUp("slow");
     }
-
-    //When clicking on background or X, remove modal
-    $("#settingsModal").click( removeModal );
-    //Allow you to click in the modal without triggering the `removeModal` function called when you click its parent element
-    $("#settingsModal .modal-content").click( function( event ) {
-        event.stopPropagation();
-    });
-
-    $("#settingsModal .glyphicon-remove").click( removeModal );
 
 
 
@@ -331,6 +338,79 @@ function runApp() {
             $("#sliderSwitcher").addClass("auto");
             $("#sliderSwitcher").html("Manual");
         }
+    });
+
+
+
+
+
+    /////////////////////////////////////////////////////////
+    // EXIT SETTINGS
+
+
+    function settingsDefaults () {
+        //"REPEATS" DEFAULT OPTIONS
+        if ($("#sliderSwitcher").hasClass("auto")) {
+            $("#repeats").slider("destroy");
+        }
+        $("#repeats").slider({
+            min: 0,
+            max: 1000,
+            value: 3,
+            scale: 'logarithmic',
+            step: 1
+        });
+        $("#sliderSwitcher").removeClass("manual");
+        $("#sliderSwitcher").addClass("auto");
+        $("#sliderSwitcher").html("Manual");
+    }
+
+    function settingsCancel () {
+        //Load the stored copy of the original settings
+        ugui.helpers.loadSettings(originalSettings);
+        //"REPEATS"
+        if ($("#sliderSwitcher").hasClass("auto")) {
+            $("#repeats").slider("destroy");
+        }
+        var repeatsValue = parseInt($("#repeats").val() || 3);
+        var repeatsOptions = {
+            min: 0,
+            max: 1000,
+            value: repeatsValue,
+            scale: 'logarithmic',
+            step: 1
+        };
+        $("#repeats").slider(repeatsOptions);
+        $("#sliderSwitcher").removeClass("manual");
+        $("#sliderSwitcher").addClass("auto");
+        $("#sliderSwitcher").html("Manual");
+        removeModal();
+    }
+
+    function settingsSave () {
+        ugui.helpers.buildUGUIArgObject();
+        ugui.helpers.saveSettings();
+        removeModal();
+    }
+
+    $("#settingsDefaults").click(function (event) {
+        event.stopPropagation();
+        settingsDefaults();
+    });
+
+    $("#settingsModal .glyphicon-remove").click( function (event) {
+        event.stopPropagation();
+        settingsCancel();
+    });
+
+    $("#settingsCancel").click(function (event) {
+        event.stopPropagation();
+        settingsCancel();
+    });
+
+    $("#settingsSave").click(function (event) {
+        event.stopPropagation();
+        settingsSave();
     });
 
 
