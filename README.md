@@ -18,6 +18,24 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 * * *
 
+###Links:
+
+* [FLIF official website](http://flif.info)
+* [FLIF on GitHub](https://github.com/FLIF-Hub/FLIF)
+
+* * *
+
+##Contributing
+
+1. Download NW.js
+2. Fork and Clone the repo
+3. Run NW.js pointing it at the repo
+ * [This video explains how to do it on Windows](http://ugui.io/tutorials/getting-started.htm) (2:15)
+ * [Or follow these instructions for other OS's](https://github.com/nwjs/nw.js/wiki/How-to-run-apps)
+4. Checkout the `dev` branch for latest code, or branch off of Master to add your own changes.
+
+* * *
+
 ###Road map
 
 New features we'd like to see added in the future:
@@ -29,10 +47,3 @@ New features we'd like to see added in the future:
 3. Better support for advanced arguments supplied by the flif.exe, such as repeats and interlacing.
 4. The ability to automatically convert an input file to both interlaced and non-interlaced and return whichever is smaller to the user (if desired).
 5. Multi-file input!
-
-* * *
-
-###Links:
-
-* [FLIF official website](http://flif.info)
-* [FLIF on GitHub](https://github.com/FLIF-Hub/FLIF)
