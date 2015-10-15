@@ -46,14 +46,14 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 ###Road map
 
-New features we'd like to see added in the future:
+New features we'd like to see added in the future. No particular order:
 
-1. Cross platform support.
- * We now support OSX, Windows, and Ubuntu, however only Windows has had an official release. After we finish adding new features and doing bug fixes, the next release will be cross-platform.
-2. Allow arbitrary image format conversion.
- * Currently you can encode .PNG, .PNM, .PPM, .PGM, .PBM, .PAM to .FLIF and decode .FLIF to .PNG, .PNM, and .PAM. In the future we'd like to support conversion to and from formats like GIF, JPG, BMP, and more by detecting these types and running them through convert.exe first before passing them to flif.exe or converting from .FLIF to .PNG/PNM/PAM and then from that to the desired output (such as GIF or JPG).
-3. Better support for advanced arguments supplied by the flif.exe, such as repeats and interlacing.
-4. The ability to automatically convert an input file to both interlaced and non-interlaced and return whichever is smaller to the user (if desired).
-5. Repeats have an interesting affect on filesize. We could add in a FLIF-Crush option that would try every combination (0-100) and return whichever highest tree value had the smallest filesize. Interlacing may play a part too.
-6. Implement Poly-FLIF.js to preview FLIF files in a quicker fashion.
-7. Multi-file input!
+* **~~Cross-Platform Support~~** - We now support OSX, Windows, and Ubuntu.
+* **Cross-Platform Release** - Only Windows has had an official release. After we finish adding new features and doing bug fixes, the next release will be cross-platform.
+* **Automated Release Builds** - We need to investigate into existing methods to build for cross platform that are reliable.
+* **Full CLI Support** - Better support for advanced arguments supplied by the flif.exe, such as repeats and interlacing.
+* **Arbitrary Format Conversion** - Currently you can encode .PNG, .PNM, .PPM, .PGM, .PBM, .PAM to .FLIF and decode .FLIF to .PNG, .PNM, and .PAM. We need to detect non-supported images, convert them to somthing supported using `convert.exe` then toss it's output into flif.exe. Also the reverse, allow for converting .flif to any image format `convert.exe` supports.
+* **Simple Compression** - The ability to automatically convert an input file to both interlaced and non-interlaced and return whichever is smaller to the user (if desired).
+* **Maximum Compression** - Repeats have an interesting affect on filesize. We could add in a FLIF-Crush option that would try every combination (0-1000) and return whichever highest tree value had the smallest filesize. Interlacing may play a part too. 
+* **FLIF Preview** - Implement Poly-FLIF.js to preview FLIF files in a quicker fashion.
+* **Multi-file Input** - The [SVGO-GUI](https://github.com/svg/svgo-gui) project is a simple app that allows for multi-file import both in the GUI and as command line arguments that can be passed in by dragging a group of files or a folder on to the .exe itself. This would be a good project to reference.
