@@ -114,7 +114,7 @@ function waitUGUI() {
 function runUGUI() {
 
 //This is the one place where the UGUI version is declared
-var uguiVersion = "1.1.1";
+var uguiVersion = "1.1.2";
 
 
 
@@ -171,6 +171,9 @@ var authorName = packageJSON.author;
 
 //Name of the starting page for the app, set in package.json
 var indexFile = packageJSON.main;
+
+//Full path to the app project folder
+var pathToProject = window.location.pathname.split(indexFile)[0];
 
 //Detect if Bootstrap is loaded
 var bootstrap3_enabled = (typeof $().emulateTransitionEnd == 'function');
@@ -2867,6 +2870,7 @@ window.ugui = {
         "description": appDescription,
         "name": appName,
         "packageJSON": packageJSON,
+        "pathToProject": pathToProject,
         "startPage": indexFile,
         "title": appTitle,
         "version": appVersion,

@@ -8,23 +8,24 @@ body.dev
 
 #uguiDevTools
     display: none
-    background-color: #E0E0E0
-    color: $uguiTextColor
-    padding: 0px 10px 0px 10px
-    border-width: 3px 3px 0px 3px
-    border-style: solid
-    border-color: #777
-    border-radius: 25px 25px 0px 0px
     width: 80%
-    position: fixed
     bottom: 0px
     left: 10%
-    letter-spacing: 0px
-    text-rendering: optimizeSpeed !important
-    -webkit-font-smoothing: antialiased
+    background-color: #FAFAFA
+    border-width: 3px 3px 0px 3px
+    border-style: solid
+    border-color: #008CBA
+    border-radius: 3px 3px 0px 0px
+    margin-bottom: 7px
+    padding: 0px 10px 0px 10px
+    position: fixed
+    color: $uguiTextColor
     font-family: sans-serif
     font-size: 14px
     line-height: 20px
+    letter-spacing: 0px
+    text-rendering: optimizeSpeed !important
+    -webkit-font-smoothing: antialiased
     transition: $quick
     z-index: 9999
     a
@@ -33,7 +34,7 @@ body.dev
         &:focus
             color: #2A6496
     nav
-        margin: 0px 0px 9px 9px
+        margin: 0px 0px 2px 2px
         span
             +user-select-none
             font-size: 10px
@@ -53,43 +54,38 @@ body.dev
     select
         background-color: #F5F5F5
         border: 1px solid #CCC
+        margin: 0px 0px 3px 0px
         padding: 2px
         font-size: 13px
         font-family: sans-serif
-        margin: 0px 0px 3px 0px
     section
-        padding: 1px
-        margin: 0px 0px 10px 0px
         display: block
         height: auto
-    video,
-    object,
-    embed,
-    iframe
+        margin: 0px 0px 10px 0px
+        padding: 1px
+    img
         display: block
         width: 320px
         height: 180px
-        float: left
         border: 0px
         margin: 0px 7px 10px 0px
         padding: 0px
+        float: left
     h3
         +bmp0
-        border: 0px
-        margin: 18px 0px 0px 0px
-        padding: 0px
+        margin-top: 18px
+        color: $uguiTextColor
         font-family: sans-serif
         font-size: 18px
         font-weight: bold
-        color: $uguiTextColor
         text-shadow: inherit
     p
         border: 0px
-        padding: 0px
         margin: 8px 0px
+        padding: 0px
+        color: $uguiTextColor
         font-size: 14px
         line-height: 1.4
-        color: $uguiTextColor
     code
         +bmp0
         color: $uguiTextColor
@@ -102,12 +98,11 @@ body.dev
         font-size: 14px
         line-height: 1.4
     li
-        line-height: 1.4
+        +bmp0
+        margin-left: 23px
         color: $uguiTextColor
+        line-height: 1.4
         font-size: 14px
-        border: 0px
-        padding: 0px
-        margin: 0px 0px 0px 23px
     &.slideHide
         bottom: -7px !important
         transition: $quick
@@ -116,8 +111,8 @@ body.dev
     .uguiSwapper p,
     .uguiCommand span,
     .helpIntro
-        font-size: 12px
         color: #444
+        font-size: 12px
 
 .shrink
     height: 0px !important
@@ -127,10 +122,6 @@ body.dev
     font-size: 0px !important
     line-height: 0px !important
     opacity: 0 !important
-    video
-        width: 0px !important
-        height: 0px !important
-        display: none !important
 
 #commandLine
     background-color: #F5F5F5

@@ -27,12 +27,6 @@ body
 
 /* Navigation */
 
-.dragon
-    -webkit-app-region: drag
-
-.dragoff
-    -webkit-app-region: no-drag
-
 .navIcons
     float: right
     margin-right: 17px
@@ -44,6 +38,10 @@ body
         text-decoration: none
         &:hover
             color: #375A7F
+
+.navbar-inverse .navbar-nav>li>a
+    padding: 12px 17px 12px 17px
+    margin-top: -1px
 
 
 
@@ -65,6 +63,22 @@ body
     height: 418px
     margin-top: 1px
     overflow: auto
+
+
+
+/* Settings */
+
+#settingsModal .modal-body
+    overflow: auto
+
+#repeats,
+#repeatsSlider
+    width: 95%
+    height: 36px
+
+#repeats
+    margin-left: 4%
+
 
 
 /* Media Queries */
