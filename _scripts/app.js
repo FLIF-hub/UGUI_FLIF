@@ -24,6 +24,8 @@ function runApp() {
     var OS = process.platform;
     var flif = "executables\\win\\flif.exe";
     var convert = "executables\\win\\convert64.exe";
+
+    //NW.js only officially supports OSX 10.9+, Win Vista+, Ubuntu 12LTS and 14LTS
     //Detect if in `darwin`, `freebsd`, `linux`, `sunos`, or `win32`
     if ( OS == "win32" ) {
         flif = "executables\\win\\flif.exe";
@@ -36,11 +38,11 @@ function runApp() {
         flif = "executables/osx/flif";
         convert = "executables/osx/convert64";
     } else {
-        flif = "executables/lin/flif";
+        flif = "executables/ubuntu/flif";
         if (process.arch == "x64") {
-            convert = "executables/lin/convert64.exe";
+            convert = "executables/ubuntu/convert64.exe";
         } else {
-            convert = "executables/lin/convert32.exe";
+            convert = "executables/ubuntu/convert32.exe";
         }
     }
     var errorMsg =
