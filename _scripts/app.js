@@ -450,7 +450,6 @@ function runApp() {
    -p, --palette=P      max palette size=P (default: P=512)
    -r, --repeats=N      N repeats for MANIAC learning (default: N=3)
 
-
 */
 
 
@@ -458,7 +457,7 @@ function runApp() {
     function clickSliderSwitcher() {
         $("#sliderSwitcher").trigger("click");
     }
-    setTimeout(clickSliderSwitcher, 250);
-    setTimeout(clickSliderSwitcher, 500);
+    //setTimeout(clickSliderSwitcher, 250);
+    //setTimeout(clickSliderSwitcher, 500);
 
 }// end runApp();
