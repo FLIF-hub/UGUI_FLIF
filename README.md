@@ -49,7 +49,7 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 New features we'd like to see added in the future:
 
 1. Cross platform support.
- * Currently only Windows is supported, but with a small amount of effort we could create an OSX or Ubuntu version identical to the windows version.
+ * We now support OSX, Windows, and Ubuntu, however only Windows has had an official release. After we finish adding new features and doing bug fixes, the next release will be cross-platform.
 2. Allow arbitrary image format conversion.
  * Currently you can encode .PNG, .PNM, .PPM, .PGM, .PBM, .PAM to .FLIF and decode .FLIF to .PNG, .PNM, and .PAM. In the future we'd like to support conversion to and from formats like GIF, JPG, BMP, and more by detecting these types and running them through convert.exe first before passing them to flif.exe or converting from .FLIF to .PNG/PNM/PAM and then from that to the desired output (such as GIF or JPG).
 3. Better support for advanced arguments supplied by the flif.exe, such as repeats and interlacing.
