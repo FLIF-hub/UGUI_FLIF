@@ -27,12 +27,18 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 * * *
 
 ##Contributing
-
+###Windows
 1. Download NW.js
 2. Fork and Clone the repo
 3. Run NW.js pointing it at the repo
  * [This video explains how to do it on Windows](http://ugui.io/tutorials/getting-started.htm) (2:15)
  * [Or follow these instructions for other OS's](https://github.com/nwjs/nw.js/wiki/How-to-run-apps)
+4. Checkout the `dev` branch for latest code, or branch off of Master to add your own changes.
+
+###OSX
+1. Fork and Clone the repo
+2. run `npm install` to download dependencies
+3. run `npm start` to load the application
 4. Checkout the `dev` branch for latest code, or branch off of Master to add your own changes.
 
 * * *
