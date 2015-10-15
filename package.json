@@ -31,6 +31,9 @@
   },
   "nodejs": true,
   "single-instance": true,
+  "scripts": {
+   "start": "./node_modules/nw/bin/nw ."
+  },
   "node-main": "_scripts/node.js",
   "webkit": {
     "page-cache": false,
