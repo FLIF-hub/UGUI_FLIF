@@ -1,6 +1,6 @@
 {
   "name": "ugui_flif",
-  "version": "0.3.0",
+  "version": "0.3.5",
   "description": "Free Lossless Image Format. View and convert FLIF files with a GUI.",
   "keywords": [ "image", "compression", "lossless" ],
   "author": "The Jared Wilcurt & Boyma Fahnbulleh",
@@ -28,7 +28,7 @@
   "main": "index.htm",
   "window": {
     "title": "UGUI: FLIF",
-    "icon": "_img/icon32.png",
+    "icon": "_img/black.png",
     "toolbar": false,
     "resizable": true,
     "visible": true,

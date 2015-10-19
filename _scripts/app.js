@@ -69,8 +69,17 @@ function runApp() {
         //Act upon the detected filetype
         if (filetype === "flif") {
             isFlif();
-        } else {
+        } else if (
+            filetype === "png" ||
+            filetype === "pnm" ||
+            filetype === "ppm" ||
+            filetype === "pgm" ||
+            filetype === "pbm" ||
+            filetype === "pam"
+           ) {
             isPng();
+        } else {
+            $(".outputContainer").html(errorMsg);
         }
 
     });
@@ -157,7 +166,7 @@ function runApp() {
         //Put a spinner and loading message on the screen while converting to flif
         $(".outputContainer").html(
             '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center text-primary">' +
-              '<img src="_img/spinner.svg" alt="Processing" class="spinner" />' +
+              '<img src="_img/processing.svg" alt="Processing" class="spinner" />' +
               'Processing' +
             '</div>'
         );
@@ -236,7 +245,7 @@ function runApp() {
 
     //When the user clicks the button in the help menu, contact Github and check for updates
     function checkForUpdates() {
-        $.get("https://api.github.com/repos/TheJaredWilcurt/UGUI_FLIF/releases", function(data){
+        $.get("https://api.github.com/repos/FLIF-Hub/UGUI_FLIF/releases", function(data){
 
             //0.2.0
             var remoteVersion = data[0].tag_name.split("v")[1];
@@ -261,7 +270,7 @@ function runApp() {
                 );
                 ugui.helpers.openDefaultBrowser();
             } else {
-                $(".updateResults").html('<p>You have the latest version of UGUI: FLIF.</p>');
+                $(".updateResults").html('<p class="text-center"><strong>You have the latest version of UGUI: FLIF.</strong></p>');
             }
         });
     }

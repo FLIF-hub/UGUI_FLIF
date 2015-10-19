@@ -114,7 +114,7 @@ function waitUGUI() {
 function runUGUI() {
 
 //This is the one place where the UGUI version is declared
-var uguiVersion = "1.1.2";
+var uguiVersion = "1.1.3";
 
 
 
@@ -174,6 +174,17 @@ var indexFile = packageJSON.main;
 
 //Full path to the app project folder
 var pathToProject = window.location.pathname.split(indexFile)[0];
+
+//Detect if in `darwin`, `freebsd`, `linux`, `sunos`, or `win32`
+var platform = process.platform;
+
+//If you're on Windows then folders in file paths are separated with `\`, otherwise OS's use `/`
+var correctSlash = "/";
+if ( platform == "win32" ) {
+    correctSlash = "\\";
+} else {
+    correctSlash = "/";
+}
 
 //Detect if Bootstrap is loaded
 var bootstrap3_enabled = (typeof $().emulateTransitionEnd == 'function');
@@ -478,7 +489,13 @@ function readAFolder(filePath, callback) {
     }
 
     //Create an object with an array in it
-    var contents = { "_folder_contents_array": [] };
+    var contents = {};
+    var contentsList = [];
+
+    //fs.readdir only accepts unix style folder paths
+    if (platform == "win32") {
+        filePath = filePath.replace("\\","/");
+    }
 
     //Read the directory passed in
     fs.readdir(filePath, function (err, files) {
@@ -490,9 +507,9 @@ function readAFolder(filePath, callback) {
         }
 
         files.forEach( function (file) {
-            fs.lstat(filePath + file, function(err, stats) {
+            fs.lstat(filePath + correctSlash + file, function(err, stats) {
                 //Retain an array of all files and folders
-                contents._folder_contents_array.push(file);
+                contentsList.push(file);
 
                 //Check if it's a folder
                 if (!err && stats.isDirectory()) {
@@ -519,10 +536,10 @@ function readAFolder(filePath, callback) {
 
     //If a callback was passed in, run it
     if (callback) {
-        callback(contents);
+        callback(contents, contentsList);
     //Otherwise just return the contents of the folder
     } else {
-        return contents;
+        return [contents, contentsList];
     }
 
 }
@@ -1292,9 +1309,6 @@ function setInputFilePathNameExt(currentElement, argName) {
     //Before continuing, verify that the user has selected a file
     if (fileAttributes) {
 
-        //Detect if in `darwin`, `freebsd`, `linux`, `sunos`, or `win32`
-        var platform = process.platform;
-
         //Create filename and file path variables to be used below
         var filename = "";
         var filepath = "";
@@ -1380,42 +1394,38 @@ function setInputFolderPathName(currentElement, argName) {
     //Before continuing, verify that the user has selected a file
     if (fileAttributes) {
 
-        //Detect if in `darwin`, `freebsd`, `linux`, `sunos`, or `win32`
-        var platform = process.platform;
-
-        //Create filename and file path variables to be used below
-        var filename = "";
-        var filepath = "";
+        //Create folder name and file path variables to be used below
+        var folderName = "";
+        var filePath = "";
 
         //Either `C:\users\bob\desktop\cows.new.png` or `/home/bob/desktop/cows.new.png`  
         //Use the first one, unless you are loading settings and it doesn't exist
-        var fullFilepath =  fileAttributes.fullpath || fileAttributes.path;
+        var fullFilePath =  fileAttributes.fullpath || fileAttributes.path;
 
         //If you're on Windows then folders in file paths are separated with `\`, otherwise OS's use `/`
         if ( platform == "win32" ) {
             //Get the index of the final backslash so we can split the name from the path
-            var lastBackslash = fullFilepath.lastIndexOf("\\");
+            var lastBackslash = fullFilePath.lastIndexOf("\\");
             //`C:\users\bob\desktop\`
-            filepath = fullFilepath.substring(0, lastBackslash+1);
-            filename = fullFilepath.split("\\").pop();
+            filePath = fullFilePath.substring(0, lastBackslash+1);
+            folderName = fullFilePath.split("\\").pop();
         } else {
             //Get the index of the final backslash so we can split the name from the path
-            var lastSlash = fullFilepath.lastIndexOf("/");
+            var lastSlash = fullFilePath.lastIndexOf("/");
             //`/home/bob/desktop/`
-            filepath = fullFilepath.substring(0, lastSlash+1);
-            filename = fullFilepath.split("/").pop();
+            filePath = fullFilePath.substring(0, lastSlash+1);
+            folderName = fullFilePath.split("/").pop();
         }
 
         //Create the args object parameters on the UGUI Args Object
         window.ugui.args[argName] = {
-            "contents": readAFolder(fullFilepath.replace("\\","/")),
-            "fullpath": fullFilepath,
-            "path": filepath,
-            "folderName": fileAttributes.name || filename,
+            "contents": readAFolder(fullFilePath)[0],
+            "contentsList": readAFolder(fullFilePath)[1],
+            "fullpath": fullFilePath,
+            "path": filePath,
+            "folderName": fileAttributes.name || folderName,
             "lastModified": fileAttributes.lastModified,
             "lastModifiedDate": fileAttributes.lastModifiedDate,
-            "size": fileAttributes.size,
-            "type": fileAttributes.type,
             "value": fileAttributes.path,
             "webkitRelativePath": fileAttributes.webkitRelativePath
         };

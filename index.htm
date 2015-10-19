@@ -61,7 +61,7 @@
             <a title="Exit"     href="#exit"     class="drag-disable glyphicon glyphicon-remove-sign"   aria-hidden="true"><span class="sr-only">Exit</span></a>
           </div>
           <a class="navbar-brand">
-            <img src="_img/logo.svg" alt="FLIF Logo" />
+            <img src="_img/white.png" alt="FLIF Logo" />
             <span class="applicationName" title="Universal GUI: Free Lossless Image Format">UGUI: FLIF</span>
           </a>
         </div>
@@ -319,12 +319,29 @@
                     This is a GUI that allows you to preview, encode, and decode .flif files.
                   </p>
                   <p>
-                    <a href="http://github.com/TheJaredWilcurt/UGUI_FLIF" class="external-link applicationTitle">UGUI: FLIF</a> is created by <a href="http://github.com/TheJaredWilcurt" class="authorName external-link">The Jared Wilcurt</a> and uses version 0.1 of the CLI version of FLIF found here: <a href="http://flif.info" class="external-link">FLIF.info</a>. FLIF is &copy;2010-2015 J. Sneyers &amp; P. Wuille, GNU GPL v3
+                    <a href="http://github.com/TheJaredWilcurt/UGUI_FLIF" class="external-link applicationTitle">UGUI: FLIF</a> uses version 0.1 (Oct. 15, 2015 Build) of the CLI version of FLIF found here: <a href="http://flif.info" class="external-link">FLIF.info</a>. FLIF is &copy;2010-2015 J. Sneyers &amp; P. Wuille, GNU GPL v3.
                   </p>
                   <p class="updateResults"></p>
                   <p class="text-center">
                     <button id="updateChecker" class="btn btn-primary">Check for updates</button>
                   </p>
+
+                  Contributors to the UGUI: FLIF<br />
+                  <!-- If the following script isn't ran on the page, it doesn't hit soon enough to check if the images loaded. -->
+                  <!-- If the images load, keep text hidden, if the app is ran while a user is offline, show text instead of images. -->
+                  <script>
+                    function disconnected() {
+                      $(".gitHubContributors").addClass("notOnline");
+                    }
+                  </script>
+                  <span class="gitHubContributors">
+                    <a class="external-link" href="http://github.com/TheJaredWilcurt">
+                      <img onerror="disconnected()" src="https://avatars.githubusercontent.com/u/4629794?v=3&s=64" alt="TheJaredWilcurt" title="TheJaredWilcurt" />
+                      TheJaredWilcurt</a>,
+                    <a class="external-link" href="http://github.com/boymanjor">
+                      <img onerror="disconnected()" src="https://avatars.githubusercontent.com/u/1259462?v=3&s=64" alt="boymanjor" title="boymanjor" />
+                      Boyma Fahnbulleh</a>
+                  </span>
                 </div>
               </div>
             </div>
