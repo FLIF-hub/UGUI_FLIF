@@ -40,6 +40,50 @@
     <link rel="icon"                         href="favicon.ico"           type="image/x-icon"                  />
     <link rel="shortcut icon"                href="favicon.ico"           type="image/ico"                     />
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+
+<style>
+  .screenshot {
+      width: 100%;
+      max-width: 509px;
+      margin-bottom: 20px;
+  }
+
+  #output thead tr {
+      background: #008CBA;
+      color: #FFF;
+  }
+
+  #os {
+      display: none;
+      font-size: 0px;
+      margin: -8px 0px 4px 0px;
+  }
+  .win,
+  .lin,
+  .osx {
+      display: inline-block;
+      height: 20px;
+      line-height: 20px;
+      font-size: 12px;
+      text-align: center;
+      color: #FFF;
+      cursor: default;
+  }
+  .win {
+      background: #297FD8;
+  }
+  .lin {
+      background: #9500BA;
+  }
+  .osx {
+      background: #FD51B0;
+  }
+
+  #total {
+      margin: 0px 0px 25px 0px;
+  }
+</style>
+
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
     <script>window.jQuery || document.write('<script src="_scripts/jquery-2.1.3.min.js"><\/script>')</script>
 
@@ -47,6 +91,9 @@
         $(document).ready(function(){
             $.get("https://api.github.com/repos/FLIF-Hub/UGUI_FLIF/releases", function(data){
                 var totalDownloads = [];
+                var win = [];
+                var lin = [];
+                var osx = [];
                 for (var i = 0; i < data.length; i++) {
                     var version = data[i].tag_name;
                     var versionNumber = version.split('v')[1];
@@ -64,10 +111,30 @@
                             var Bytes = data[i].assets[j].size;
                             var KB = Bytes / 1024;
                             var MB = KB / 1024;
-                            sizeMB = (Math.floor(MB * 100) / 100) + " MB";
+                            sizeMB = (Math.round(MB * 10) / 10) + " MB";
                             var name = data[i].assets[j].name;
                             download = '<a href="' + downloadURL + '" title="Download this version">' + name + '</a>';
                             totalDownloads.push(downloads);
+                            //If file is bigger than 20MB
+                            if ( Bytes > 20000000 ) {
+                                //"23nil-5.3.0_FILF_IUGU"
+                                var reversedName = name.split("").reverse().join("").split("piz.")[1];
+                                var firstChar = reversedName.charAt(0);
+                                //If the filename ends in 32 or 64
+                                if ( (firstChar == "2") || (firstChar == "4") ) {
+                                    //Remove the first 2 characters of the reversed string (32 or 64)
+                                    reversedName = reversedName.substr(2);
+                                }
+                                //niW, niL, or xsO, 3rd charachter will be w, l, or o
+                                var osLetter = reversedName.toLowerCase().charAt(2);
+                                if ( osLetter == "w" ) {
+                                    win.push(downloads);
+                                } else if ( osLetter == "l" ) {
+                                    lin.push(downloads);
+                                } else if ( osLetter == "o" ) {
+                                    osx.push(downloads);
+                                }
+                            }
                             $("#output tbody").append(
                                 '<tr>' +
                                   '<td><strong>' + version + '</strong></td>' +
@@ -91,10 +158,28 @@
                     }
                 }
                 var downloadCount = 0;
+                var downloadCountWIN = 0;
+                var downloadCountLIN = 0;
+                var downloadCountOSX = 0;
                 for (var k = 0; k < totalDownloads.length; k++) {
                     downloadCount = downloadCount + totalDownloads[k];
                 }
-                $("#output").after('<p>The official releases of UGUI: FLIF have been downloaded <strong>' + downloadCount + '</strong> times.</p>');
+                for (var l = 0; l < win.length; l++) {
+                    downloadCountWIN = downloadCountWIN + win[l];
+                }
+                for (var m = 0; m < lin.length; m++) {
+                    downloadCountLIN = downloadCountLIN + lin[m];
+                }
+                for (var n = 0; n < osx.length; n++) {
+                    downloadCountOSX = downloadCountOSX + osx[n];
+                }
+                $("#total").html('<p>The official releases of UGUI: FLIF have been downloaded <strong>' + downloadCount + ' times</strong>.</p>');
+                var withoutCLI = downloadCountWIN + downloadCountLIN + downloadCountOSX;
+                console.log(withoutCLI);
+                $("#os .win").width( Math.round( (downloadCountWIN / withoutCLI) * 100) + "%" ).attr("title", downloadCountWIN + " downloads");
+                $("#os .lin").width( Math.round( (downloadCountLIN / withoutCLI) * 100) + "%" ).attr("title", downloadCountLIN + " downloads");
+                $("#os .osx").width( Math.round( (downloadCountOSX / withoutCLI) * 100) + "%" ).attr("title", downloadCountOSX + " downloads");
+                $("#os").show();
             });
         });
     </script>
@@ -111,13 +196,13 @@
       <div class="row">
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 text-center">
-          <img src="http://i.imgur.com/mt80RRZ.gif" alt="Screenshot" style="width: 100%;max-width: 509px;margin-bottom:20px;" />
+          <img src="http://i.imgur.com/mt80RRZ.gif" alt="Screenshot" class="screenshot" />
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
           <table id="output" class="table table-hover">
             <thead>
-              <tr style="background: #008CBA;color: #FFF">
+              <tr>
                 <td><strong>Version</strong></td>
                 <td>Download</td>
                 <td>Size</td>
@@ -127,10 +212,16 @@
             </thead>
             <tbody></tbody>
           </table>
+          <div id="os">
+            <div class="win">Windows</div>
+            <div class="lin">Linux</div>
+            <div class="osx">OSX</div>
+          </div>
+          <div id="total"></div>
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 text-center">
-          <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/qHMRroZ7AAw?rel=0" frameborder="0" allowfullscreen></iframe>
+          <iframe width="100%" height="315" src="https://www.youtube-nocookie.com/embed/qHMRroZ7AAw?rel=0" frameborder="0" allowfullscreen></iframe>
         </div>
 
       </div>
