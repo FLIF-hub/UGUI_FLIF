@@ -1,13 +1,10 @@
 {
   "name": "ugui_flif",
+  "homepage": "http://flif.info/UGUI_FLIF",
   "version": "0.3.5",
-  "description": "Free Lossless Image Format. View and convert FLIF files with a GUI.",
-  "keywords": [ "image", "compression", "lossless" ],
   "author": "The Jared Wilcurt & Boyma Fahnbulleh",
-  "licenses": [{
-    "type": "GPL3",
-    "url": "https://github.com/FLIF-hub/UGUI_FLIF/tree/master/legal"
-  }],
+  "description": "Free Lossless Image Format. View and convert FLIF files with a GUI.",
+  "keywords": [ "image", "compression", "lossless", "flif" ],
   "maintainers":[{
     "name": "The Jared Wilcurt",
     "email": "TheJaredWilcurt@users.noreply.github.com",
@@ -18,13 +15,7 @@
     "url": "git://github.com/FLIF-Hub/UGUI_FLIF.git"
   }],
   "bugs": "https://github.com/FLIF-Hub/UGUI_FLIF/issues",
-  "scripts": {
-    "start": "nw ."
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "nw": "^0.12.3"
-  },
+  "license": "GPL3",
   "main": "index.htm",
   "window": {
     "title": "UGUI: FLIF",
@@ -53,5 +44,17 @@
     "page-cache": false,
     "java": false,
     "plugin": true
-  }
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "nw": "^0.12.3"
+  },
+  "scripts": {
+    "start": "nw ."
+  },
+  "licenses": [{
+    "type": "GPL3",
+    "url": "https://github.com/FLIF-hub/UGUI_FLIF/tree/master/legal"
+  }]
 }
