@@ -1,4 +1,8 @@
 $(document).ready(function(){
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     $.get("https://api.github.com/repos/FLIF-Hub/UGUI_FLIF/releases", function(data){
         var totalDownloads = [];
         var win = [];
@@ -21,7 +25,7 @@ $(document).ready(function(){
                     var Bytes = data[i].assets[j].size;
                     var KB = Bytes / 1024;
                     var MB = KB / 1024;
-                    sizeMB = (Math.round(MB * 10) / 10) + " MB";
+                    sizeMB = '<span title="' + numberWithCommas(Math.round(KB)) + ' KB">' + (Math.round(MB * 10) / 10) + ' MB</span>';
                     var name = data[i].assets[j].name;
                     download = '<a href="' + downloadURL + '" title="Download this version">' + name + '</a>';
                     totalDownloads.push(downloads);
@@ -45,8 +49,15 @@ $(document).ready(function(){
                             osx.push(downloads);
                         }
                     }
+                    //Make the line between releases thicker
+                    var tr = "<tr>";
+                    if (j == 0 && i == 0) {
+                        tr = '<tr class="latest-release">';
+                    } else if (j == 0) {
+                        tr = '<tr class="new-release">';
+                    }
                     $("#output tbody").append(
-                        '<tr>' +
+                        tr +
                           '<td><strong>' + version + '</strong></td>' +
                           '<td>' + download + '</td>' +
                           '<td>' + sizeMB + '</td>' +
@@ -89,6 +100,6 @@ $(document).ready(function(){
         $("#os .win").width( Math.round( (downloadCountWIN / withoutCLI) * 100) + "%" ).attr("title", downloadCountWIN + " downloads");
         $("#os .lin").width( Math.round( (downloadCountLIN / withoutCLI) * 100) + "%" ).attr("title", downloadCountLIN + " downloads");
         $("#os .osx").width( Math.round( (downloadCountOSX / withoutCLI) * 100) + "%" ).attr("title", downloadCountOSX + " downloads");
-        $("#os").show();
+        $("#os").css("visibility", "visible");
     });
 });
