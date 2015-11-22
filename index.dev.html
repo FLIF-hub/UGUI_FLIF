@@ -47,6 +47,71 @@
       max-width: 509px;
       margin-bottom: 20px;
   }
+
+  /* Download Buttons */
+  .linux .dl-btn-win,
+  .mac .dl-btn-win,
+  .dl-btn-lin,
+  .dl-btn-osx {
+      display: none;
+  }
+  .dl-btn-win,
+  .dl-btn-osx {
+      height: 60px;
+      background: #FD7349;
+      margin: 0px auto 16px auto;
+      padding: 0px;
+      color: #FFF;
+      font-size: 27px;
+      font-weight: bold;
+      line-height: 65px;
+      text-align: center;
+  }
+  .mac .dl-btn-osx {
+      display: block;
+  }
+  .linux .dl-btn-lin {
+      display: block;
+      background: #FD7349;
+      margin: 0px auto 16px auto;
+      padding: 10px 0px 0px 0px;
+      color: #FFF;
+      font-size: 25px;
+      font-weight: bold;
+      text-align: center;
+  }
+  .dl-btn-lin a {
+      display: inline-block;
+      width: 50%;
+      padding: 2px 0px 6px 0px;
+      font-size: 30px;
+  }
+  .dl-btn-win:hover,
+  .dl-btn-osx:hover,
+  .dl-btn-lin a:hover {
+      background: #F15322;
+  }
+  .dl-btn-win a,
+  .dl-btn-lin a,
+  .dl-btn-osx a {
+      color: #FFF;
+  }
+  .dl-btn-win a:hover,
+  .dl-btn-lin a:hover,
+  .dl-btn-osx a:hover,
+  .dl-btn-win a:active,
+  .dl-btn-lin a:active,
+  .dl-btn-osx a:active,
+  .dl-btn-win a:visited,
+  .dl-btn-lin a:visited,
+  .dl-btn-osx a:visited,
+  .dl-btn-win a:focus,
+  .dl-btn-lin a:focus,
+  .dl-btn-osx a:focus {
+      text-decoration: none;
+  }
+
+  /* Archive Table */
   #output thead tr {
       background: #008CBA;
       color: #FFF;
@@ -57,6 +122,8 @@
   .latest-release td {
       border-top: 0px !important;
   }
+
+  /* OS totals chart */
   #os {
       visibility: hidden;
       width: 100%;
@@ -82,7 +149,6 @@
   .osx {
       background: #FD51B0;
   }
-
   #total {
       margin: 0px 0px 25px 0px;
   }
@@ -112,6 +178,9 @@
           animation: octocat-wave 560ms ease-in-out;
       }
   }
+  html {
+      background: #FFF !important;
+  }
 </style>
 
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
@@ -134,6 +203,18 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+
+          <div class="dl-btn-win">
+            <a href="#">Download for Windows</a>
+          </div>
+          <div class="dl-btn-lin">
+            Download for Linux<br />
+            <a href="#">32-Bit</a><a href="#">64-Bit</a>
+          </div>
+          <div class="dl-btn-osx">
+            <a href="#">Download for OSX</a>
+          </div>
+
           <table id="output" class="table table-hover">
             <thead>
               <tr>
