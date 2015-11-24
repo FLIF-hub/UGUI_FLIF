@@ -10,27 +10,28 @@
 .dl-btn-win,
 .dl-btn-osx
     height: 60px
+
+.dl-btn-win,
+.dl-btn-osx,
+.linux .dl-btn-lin
     background: #FD7349
     margin: 0px auto 16px auto
     padding: 0px
     color: #FFF
+    font-family: "Ruda", sans-serif
     font-size: 27px
-    font-weight: bold
+    font-weight: 700
     line-height: 65px
     text-align: center
+    overflow: hidden
 
-.mac .dl-btn-osx
+.mac .dl-btn-osx,
+.linux .dl-btn-lin
     display: block
 
 .linux .dl-btn-lin
-    display: block
-    background: #FD7349
-    margin: 0px auto 16px auto
     padding: 10px 0px 0px 0px
-    color: #FFF
     font-size: 25px
-    font-weight: bold
-    text-align: center
 
 .dl-btn-lin a
     display: inline-block
@@ -43,21 +44,17 @@
 .dl-btn-lin a:hover
     background: #F15322
 
-.dl-btn-win a,
-.dl-btn-lin a,
-.dl-btn-osx a
-    color: #FFF
+.dl-btn-win,
+.dl-btn-lin,
+.dl-btn-osx
+    a
+        color: #FFF
 
-.dl-btn-win a:hover,
-.dl-btn-lin a:hover,
-.dl-btn-osx a:hover,
-.dl-btn-win a:active,
-.dl-btn-lin a:active,
-.dl-btn-osx a:active,
-.dl-btn-win a:visited,
-.dl-btn-lin a:visited,
-.dl-btn-osx a:visited,
-.dl-btn-win a:focus,
-.dl-btn-lin a:focus,
-.dl-btn-osx a:focus
-    text-decoration: none
+.dl-btn-win,
+.dl-btn-lin,
+.dl-btn-osx
+    a:hover,
+    a:active,
+    a:visited,
+    a:focus
+        text-decoration: none
