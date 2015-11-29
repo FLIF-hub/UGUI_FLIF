@@ -4,15 +4,21 @@
 .linux .dl-btn-win,
 .mac .dl-btn-win,
 .dl-btn-lin,
+.dl-btn-lin32,
+.dl-btn-lin64,
 .dl-btn-osx
     display: none
 
 .dl-btn-win,
-.dl-btn-osx
+.dl-btn-osx,
+.dl-btn-lin32,
+.dl-btn-lin64
     height: 60px
 
 .dl-btn-win,
 .dl-btn-osx,
+.dl-btn-lin32,
+.dl-btn-lin64,
 .linux .dl-btn-lin
     background: #FD7349
     margin: 0px auto 16px auto
@@ -26,8 +32,14 @@
     overflow: hidden
 
 .mac .dl-btn-osx,
-.linux .dl-btn-lin
+.linux .dl-btn-lin,
+.linux.arch32 .dl-btn-lin32,
+.linux.arch64 .dl-btn-lin64
     display: block
+
+.linux.arch32 .dl-btn-lin,
+.linux.arch64 .dl-btn-lin
+    display: none
 
 .linux .dl-btn-lin
     padding: 10px 0px 0px 0px
@@ -41,18 +53,24 @@
 
 .dl-btn-win:hover,
 .dl-btn-osx:hover,
+.dl-btn-lin32:hover,
+.dl-btn-lin64:hover,
 .dl-btn-lin a:hover
     background: #F15322
 
 .dl-btn-win,
+.dl-btn-osx,
 .dl-btn-lin,
-.dl-btn-osx
+.dl-btn-lin32,
+.dl-btn-lin64
     a
         color: #FFF
 
 .dl-btn-win,
+.dl-btn-osx,
 .dl-btn-lin,
-.dl-btn-osx
+.dl-btn-lin32,
+.dl-btn-lin64
     a:hover,
     a:active,
     a:visited,

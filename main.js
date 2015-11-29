@@ -105,6 +105,8 @@ $(document).ready(function(){
         var latestVersion = data[0].tag_name.split('v')[1];
         $(".dl-btn-win a").attr("href", "https://github.com/FLIF-hub/UGUI_FLIF/releases/download/v" + latestVersion + "/UGUI_FLIF_" + latestVersion + "-win.zip");
         $(".dl-btn-osx a").attr("href", "https://github.com/FLIF-hub/UGUI_FLIF/releases/download/v" + latestVersion + "/UGUI_FLIF_" + latestVersion + "-osx.zip");
+        $(".dl-btn-lin32 a").attr("href", "https://github.com/FLIF-hub/UGUI_FLIF/releases/download/v" + latestVersion + "/UGUI_FLIF_" + latestVersion + "-lin32.zip");
+        $(".dl-btn-lin64 a").attr("href", "https://github.com/FLIF-hub/UGUI_FLIF/releases/download/v" + latestVersion + "/UGUI_FLIF_" + latestVersion + "-lin64.zip");
         $(".dl-btn-lin a:first-of-type").attr("href", "https://github.com/FLIF-hub/UGUI_FLIF/releases/download/v" + latestVersion + "/UGUI_FLIF_" + latestVersion + "-lin32.zip");
         $(".dl-btn-lin a:last-of-type").attr("href", "https://github.com/FLIF-hub/UGUI_FLIF/releases/download/v" + latestVersion + "/UGUI_FLIF_" + latestVersion + "-lin64.zip");
 
