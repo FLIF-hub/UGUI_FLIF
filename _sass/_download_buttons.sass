@@ -3,6 +3,8 @@
 
 .linux .dl-btn-win,
 .mac .dl-btn-win,
+.linux.arch32 .dl-btn-lin,
+.linux.arch64 .dl-btn-lin,
 .dl-btn-lin,
 .dl-btn-lin32,
 .dl-btn-lin64,
@@ -38,8 +40,10 @@
     display: block
 
 .linux.arch32 .dl-btn-lin,
-.linux.arch64 .dl-btn-lin
-    display: none
+.linux.arch32 .dl-btn-lin64,
+.linux.arch64 .dl-btn-lin,
+.linux.arch64 .dl-btn-lin32
+    display: none !important
 
 .linux .dl-btn-lin
     padding: 10px 0px 0px 0px
