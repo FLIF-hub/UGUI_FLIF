@@ -53,6 +53,7 @@ New features we'd like to see added in the future. No particular order:
 
 * **~~Cross-Platform Support~~** - We now support OSX, Windows, and Ubuntu.
 * **~~Cross-Platform Release~~** - We have done an [official release](http://github.com/FLIF-Hub/UGUI_FLIF/releases) supporting OSX, Windows, and Ubuntu.
+* **Improve processing time** - Currently we just wait a few seconds after the exe finishes before displaying any results to give the filesystem a chance to catch up. Need to introduce a way of detecting when the filesystem is ready. Pinging it every 100ms for a filesize may be the best option.
 * **Full CLI Support** - Better support for advanced arguments supplied by the flif.exe, such as repeats and interlacing.
 * **Arbitrary Format Conversion** - Currently you can encode .PNG, .PNM, .PPM, .PGM, .PBM, .PAM to .FLIF and decode .FLIF to .PNG, .PNM, and .PAM. We need to detect non-supported images, convert them to somthing supported using `convert.exe` then toss it's output into flif.exe. Also the reverse, allow for converting .flif to any image format `convert.exe` supports.
 * **Simple Compression** - The ability to automatically convert an input file to both interlaced and non-interlaced and return whichever is smaller to the user (if desired).
