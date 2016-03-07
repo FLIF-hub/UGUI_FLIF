@@ -32,7 +32,8 @@ $(document).ready(function(){
                     //If file is bigger than 20MB
                     if ( Bytes > 20000000 ) {
                         //"23nil-5.3.0_FILF_IUGU"
-                        var reversedName = name.split("").reverse().join("").split("piz.")[1];
+                        var reversedName = name.split("").reverse().join("");
+                        reversedName = reversedName.replace("piz.", "").replace("exe.", "");
                         var firstChar = reversedName.charAt(0);
                         //If the filename ends in 32 or 64
                         if ( (firstChar == "2") || (firstChar == "4") ) {
