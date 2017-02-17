@@ -20,10 +20,15 @@ function runApp () {
     var fs = require('fs');
     var path = require('path');
     var nw = require('nw.gui');
+
+    // SHOW DEVELOPER TOOLS
+    // nw.Window.get().showDevTools();
+
     var appData = nw.App.dataPath;
     var win = nw.Window.get();
     var OS = process.platform;
     var effortDefaultValue = 60;
+    var lossyDefaultValue = 100;
     var qualityDefaultValue = 100;
     var flif = path.join('executables', 'win', 'flif64.exe');
     // eslint-disable-next-line no-unused-vars
@@ -200,6 +205,7 @@ function runApp () {
         var size = ugui.args.fileToProcess.size;
         var outputFlif = ugui.args.fileToProcess.path + name + '.flif';
         var effort = ugui.args.effort.value;
+        var lossy = ugui.args.lossy.value;
         var interlace = ugui.args.interlacingauto.value;
         if (ugui.args.interlacingoff.htmlticked) {
             interlace = ' ' + ugui.args.interlacingoff.value;
@@ -208,7 +214,14 @@ function runApp () {
         }
 
         // flif.exe -d --quality=100 "C:\folder\cow.png" "C:\folder\cow.flif"
-        var executableAndArguments = flif + ' --encode --effort=' + effort + interlace + ' "' + fullPath + '" "' + outputFlif + '"';
+        var executableAndArguments =
+            flif +
+            ' --encode' +
+            interlace +
+            ' --effort=' + effort +
+            ' --lossy=' + lossy +
+            ' "' + fullPath + '"' +
+            ' "' + outputFlif + '"';
 
         var parameters = {
             'executableAndArgs': executableAndArguments,
@@ -248,6 +261,7 @@ function runApp () {
                         '</div>'
                     );
                 }
+                updateUI();
                 window.setTimeout(updateUI, 3000);
             },
             'onError': function (err) {
@@ -381,6 +395,7 @@ function runApp () {
 
     function settingsDefaults () {
         $('#effort').slider('setValue', effortDefaultValue);
+        $('#lossy').slider('setValue', lossyDefaultValue);
         $('#quality').slider('setValue', qualityDefaultValue);
     }
 
@@ -391,6 +406,9 @@ function runApp () {
                 // reset the contents of the settings modal back to what the original settings were
                 var effortValue = parseInt($('#effort').val() || effortDefaultValue);
                 $('#effort').slider('setValue', effortValue);
+
+                var lossyValue = parseInt($('#lossy').val() || lossyDefaultValue);
+                $('#lossy').slider('setValue', lossyValue);
 
                 var qualityValue = parseInt($('#quality').val() || qualityDefaultValue);
                 $('#quality').slider('setValue', qualityValue);
@@ -410,6 +428,15 @@ function runApp () {
                 };
                 $('#effort').slider(effortOptions);
 
+                var lossyValue = parseInt($('#lossy').val() || lossyDefaultValue);
+                var lossyOptions = {
+                    'min': 0,
+                    'max': 100,
+                    'value': lossyValue,
+                    'step': 1
+                };
+                $('#lossy').slider(lossyOptions);
+
                 var qualityValue = parseInt($('#quality').val() || qualityDefaultValue);
                 var qualityOptions = {
                     'min': 0,
@@ -427,6 +454,14 @@ function runApp () {
                 'step': 1
             };
             $('#effort').slider(effortOptions);
+
+            var lossyOptions = {
+                'min': 0,
+                'max': 100,
+                'value': lossyDefaultValue,
+                'step': 1
+            };
+            $('#lossy').slider(lossyOptions);
 
             var qualityOptions = {
                 'min': 0,

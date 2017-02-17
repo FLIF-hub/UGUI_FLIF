@@ -33,7 +33,7 @@
 
 
   <!-- Change the class form dev to prod when you're ready to distribute your application. -->
-  <body role="document" class="dev">
+  <body role="document" class="prod">
 
 
 
@@ -242,10 +242,22 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-xs-9 col-s-9 col-md-9 col-l-9 vcenter">
+                      <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
                         <input id="effort" type="number" data-argName="effort" data-slider-id="effortSlider" class="form-control" />
                       </div>
                     </div>
+
+                    <div class="row">
+                      <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
+                        <label for="lossy"><strong>Lossy</strong><br />100 is lossless encoding, meaning your FLIF will be pixel-for-pixel identical to your original image. Below 100 will modify the image to have better compression.</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
+                        <input id="lossy" type="number" data-argName="lossy" data-slider-id="lossySlider" class="form-control" />
+                      </div>
+                    </div>
+
                     <div class="btn-group">
                       <label><strong>Interlacing</strong><br />Auto will turn interlacing on by default except for very small images.</label><br />
                       <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Auto <span class="caret"></span></button>
@@ -287,7 +299,7 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-xs-9 col-s-9 col-md-9 col-l-9 vcenter">
+                      <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
                         <input id="quality" type="number" data-argName="quality" data-slider-id="qualitySlider" class="form-control" />
                       </div>
                     </div>
@@ -335,7 +347,7 @@
 
               <div class="panel panel-primary">
                 <div class="panel-heading">
-                  <span class="pull-right versionApp" title="Version">V0.3.0</span>
+                  <span class="pull-right versionApp" title="Version">V1.0.0</span>
                   <h3 class="panel-title">About <span class="applicationTitle">UGUI: FLIF</span></h3>
                 </div>
                 <div class="panel-body">
@@ -343,7 +355,7 @@
                     This is a GUI that allows you to preview, encode, and decode .flif files.
                   </p>
                   <p>
-                    <a href="http://github.com/TheJaredWilcurt/UGUI_FLIF" class="external-link applicationTitle">UGUI: FLIF</a> uses version 0.1 (Oct. 15, 2015 Build) of the CLI version of FLIF found here: <a href="http://flif.info" class="external-link">FLIF.info</a>. FLIF is &copy;2010-2015 J. Sneyers &amp; P. Wuille, GNU GPL v3.
+                    <a href="http://github.com/TheJaredWilcurt/UGUI_FLIF" class="external-link applicationTitle">UGUI: FLIF</a> uses version 0.2.2 (Nov 8, 2016 Build) of the CLI version of FLIF found here: <a href="http://flif.info" class="external-link">FLIF.info</a>. FLIF is &copy;2010-2017 J. Sneyers &amp; P. Wuille, GNU GPL v3.
                   </p>
                   <p class="updateResults"></p>
                   <p class="text-center">
