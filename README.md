@@ -31,32 +31,10 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 ##Contributing
 
-###If you have Node and NPM installed
-1. Fork and Clone the repo
-2. run `npm install` to download dependencies
-3. run `npm start` to load the application
-4. Checkout the `dev` branch for latest code, or branch off of Master to add your own changes.
-
-###If you don't have Node or NPM installed
-1. Download [NW.js](http://nwjs.io)
-2. Fork and Clone the repo
-3. Run NW.js pointing it at the repo
- * [This video explains how to do it on Windows](http://ugui.io/tutorials/getting-started.htm) (2:15)
- * [Or follow these instructions for other OS's](https://github.com/nwjs/nw.js/wiki/How-to-run-apps)
-4. Checkout the `dev` branch for latest code, or branch off of Master to add your own changes.
+See the README in the [dev](https://github.com/FLIF-hub/UGUI_FLIF/tree/dev) branch.
 
 * * *
 
 ###Road map
 
-New features we'd like to see added in the future. No particular order:
-
-* **~~Cross-Platform Support~~** - We now support OSX, Windows, and Ubuntu.
-* **~~Cross-Platform Release~~** - We have done an [official release](http://github.com/FLIF-Hub/UGUI_FLIF/releases) supporting OSX, Windows, and Ubuntu.
-* **Improve processing time** - Currently we just wait a few seconds after the exe finishes before displaying any results to give the filesystem a chance to catch up. Need to introduce a way of detecting when the filesystem is ready. Pinging it every 100ms for a filesize may be the best option.
-* **Full CLI Support** - Better support for advanced arguments supplied by the flif.exe, such as repeats and interlacing.
-* **Arbitrary Format Conversion** - Currently you can encode .PNG, .PNM, .PPM, .PGM, .PBM, .PAM to .FLIF and decode .FLIF to .PNG, .PNM, and .PAM. We need to detect non-supported images, convert them to somthing supported using `convert.exe` then toss it's output into flif.exe. Also the reverse, allow for converting .flif to any image format `convert.exe` supports.
-* **Simple Compression** - The ability to automatically convert an input file to both interlaced and non-interlaced and return whichever is smaller to the user (if desired).
-* **Maximum Compression** - Repeats have an interesting affect on filesize. We could add in a FLIF-Crush option that would try every combination (0-1000) and return whichever highest tree value had the smallest filesize. Interlacing may play a part too. 
-* **FLIF Preview** - Implement Poly-FLIF.js to preview FLIF files in a quicker fashion.
-* **Multi-file Input** - The [SVGO-GUI](https://github.com/svg/svgo-gui) project is a simple app that allows for multi-file import both in the GUI and as command line arguments that can be passed in by dragging a group of files or a folder on to the .exe itself. This would be a good project to reference.
+See the README in the [dev](https://github.com/FLIF-hub/UGUI_FLIF/tree/dev) branch.
