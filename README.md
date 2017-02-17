@@ -10,13 +10,13 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 * * *
 
-##UGUI: FLIF Website
+## UGUI: FLIF Website
 
 * http://flif-hub.github.io/UGUI_FLIF/
 
 * * *
 
-###Screenshots and Download
+### Screenshots and Download
 
 * https://github.com/FLIF-Hub/UGUI_FLIF/releases
 
@@ -24,7 +24,7 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 * * *
 
-###Links:
+### Links:
 
 * [FLIF official website](http://flif.info)
 * [FLIF on GitHub](https://github.com/FLIF-Hub/FLIF)
@@ -32,9 +32,9 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 * * *
 
-##Contributing
+## Contributing
 
-###Prerequisites
+### Prerequisites
 
 1. Install [git](https://git-scm.com)
 1. Install Node & NPM:
@@ -46,7 +46,7 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
     * Create a symbolic link for node `sudo ln -s /usr/bin/nodejs /usr/bin/node`
 1. Download [EditorConfig](http://editorconfig.org) for your text editor/IDE.
 
-###Running locally
+### Running locally
 
 1. On GitHub, [fork this repo](https://help.github.com/articles/fork-a-repo/).
 1. Use `git` to clone down a local copy of your fork to the folder where you keep your projects or repos.
@@ -59,7 +59,7 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 If you are going to make your own changes, you should branch off of the `dev` branch, and when read, make a Pull Request comparing your branch against the `dev` branch **not the `master` branch**.
 
-###Linting locally
+### Linting locally
 
 1. To lint the JavaScript files: `npm run lint`
 1. To have ESLint attempt to auto-fix problems: `npm run fix`
@@ -67,7 +67,7 @@ If you are going to make your own changes, you should branch off of the `dev` br
 
 * * *
 
-###Road map
+## Road map
 
 New features we'd like to see added in the future. No particular order:
 
