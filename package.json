@@ -1,7 +1,7 @@
 {
   "name": "ugui_flif",
   "homepage": "http://flif.info/UGUI_FLIF",
-  "version": "0.3.5",
+  "version": "1.0.0",
   "author": "The Jared Wilcurt & Boyma Fahnbulleh",
   "description": "Free Lossless Image Format. View and convert FLIF files with a GUI.",
   "keywords": [ "image", "compression", "lossless", "flif" ],

@@ -21,7 +21,8 @@
     <script type="text/javascript" src="_scripts/app.js"></script>
 
     <cmd executable="flif"></cmd>
-    <cmd executable="flifSettings"></cmd>
+    <cmd executable="flifEncodeSettings"></cmd>
+    <cmd executable="flifDecodeSettings"></cmd>
 
   </head>
 
@@ -234,19 +235,25 @@
                 </div>
                 <div class="panel-body">
 
-                  <form id="flifSettings" role="form-inline">
+                  <form id="flifEncodeSettings" role="form-inline">
                     <div class="row">
                       <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
-                        <label for="repeats"><strong>Tree Learning</strong><br />More iterations increases CPU cycles, but results in better trees and thus smaller files. Default Setting is 3.</label>
+                        <label for="effort"><strong>Effort</strong><br />More iterations increases CPU cycles, but results in better trees and thus smaller files. Default Setting is 60.</label>
                       </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-9 col-s-9 col-md-9 col-l-9 vcenter">
-                          <input id="repeats" type="number" data-argName="repeats" data-slider-id="repeatsSlider" data-slider-min="0" min="0" max="1000" data-slider-max="1000" data-slider-step="1" data-slider-value="3" class="form-control" />
-                        </div>
-                        <div class="col-xs-3 col-s-3 col-md-3 col-l-3 text-center">
-                          <button id="sliderSwitcher" class="btn btn-info btn-sm auto">Manual</button>
-                        </div>
+                      <div class="col-xs-9 col-s-9 col-md-9 col-l-9 vcenter">
+                        <input id="effort" type="number" data-argName="effort" data-slider-id="effortSlider" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="btn-group">
+                      <label><strong>Interlacing</strong><br />Auto will turn interlacing on by default except for very small images.</label><br />
+                      <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Auto <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li><input type="radio" name="interlacing" data-argName="interlacingauto" id="interlacingauto" value=""  checked="checked" /><label for="interlacingauto" >Auto</label></li>
+                        <li><input type="radio" name="interlacing" data-argName="interlacingon"   id="interlacingon"   value="-I"                  /><label for="interlacingon"   >On</label></li>
+                        <li><input type="radio" name="interlacing" data-argName="interlacingoff"  id="interlacingoff"  value="-N"                  /><label for="interlacingoff"  >Off</label></li>
+                      </ul>
                     </div>
                   </form>
 
@@ -261,10 +268,27 @@
                 </div>
                 <div class="panel-body">
 
-                  <form id="flifSettings" role="form-inline">
+                  <form id="flifDecodeSettings" role="form-inline">
+                    <div class="btn-group">
+                      <label><strong>Output Filetype</strong><br />File format to convert your FLIF to. Default is .PNG.</label><br />
+                      <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">.PNG <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li><input type="radio" name="extension" data-argName="extensionpng" id="extensionpng" value="png" checked="checked" /><label for="extensionpng" >.PNG</label></li>
+                        <li><input type="radio" name="extension" data-argName="extensionpnm" id="extensionpnm" value="pnm"                   /><label for="extensionpnm" >.PNM</label></li>
+                        <li><input type="radio" name="extension" data-argName="extensionppm" id="extensionppm" value="ppm"                   /><label for="extensionppm" >.PPM</label></li>
+                        <li><input type="radio" name="extension" data-argName="extensionpgm" id="extensionpgm" value="pgm"                   /><label for="extensionpgm" >.PGM</label></li>
+                        <li><input type="radio" name="extension" data-argName="extensionpbm" id="extensionpbm" value="pbm"                   /><label for="extensionpbm" >.PBM</label></li>
+                        <li><input type="radio" name="extension" data-argName="extensionpam" id="extensionpam" value="pam"                   /><label for="extensionpam" >.PAM</label></li>
+                      </ul>
+                    </div>
                     <div class="row">
                       <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
-                      <!-- -->
+                        <label for="quality"><strong>Quality</strong><br />Default is 100.</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-9 col-s-9 col-md-9 col-l-9 vcenter">
+                        <input id="quality" type="number" data-argName="quality" data-slider-id="qualitySlider" class="form-control" />
                       </div>
                     </div>
                   </form>

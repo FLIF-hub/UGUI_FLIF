@@ -5,27 +5,26 @@ var ugui = window.ugui;
 // Wait for the document to load and for ugui.js to run before running your app's custom JS
 $(document).ready(runApp);
 
+
+
 // Container for your app's custom JS
 function runApp () {
 
 
 
-    // Load settings if any were saved previously
-    ugui.helpers.loadSettings();
-
-
-
 
     // /////////////////////////////////////////////////////
-    // IMPORTING A FILE
-
+    // GENERAL SET UP
 
     // Variables
     var fs = require('fs');
     var path = require('path');
-    var gui = require('nw.gui');
-    var win = gui.Window.get();
+    var nw = require('nw.gui');
+    var appData = nw.App.dataPath;
+    var win = nw.Window.get();
     var OS = process.platform;
+    var effortDefaultValue = 60;
+    var qualityDefaultValue = 100;
     var flif = path.join('executables', 'win', 'flif64.exe');
     // eslint-disable-next-line no-unused-vars
     var convert = path.join('executables', 'win', 'convert64.exe');
@@ -56,7 +55,19 @@ function runApp () {
       '<h4 class="text-danger text-center"><strong>There was an error.</strong></h4>' +
       '<div class="text-warning text-center">Make sure you are using one of these file types:<br />' +
       '<code>.FLIF .PNG .PNM .PPM .PGM .PBM .PAM</code></div>';
-    var originalSettings = path.join(gui.App.dataPath, 'originalsettings.json');
+    // When the user opens the settings menu, we create a save file of their existing settings so
+    // if they change anything and want to cancel we can reset the values to what it was when the
+    // modal was first opened.
+    var originalSettings = path.join(appData, 'originalsettings.json');
+
+    // Load settings if any were saved previously
+    loadSettings();
+
+
+
+
+    // /////////////////////////////////////////////////////
+    // IMPORTING A FILE
 
 
     // When the user drops an image detect if it's a FLIF or not
@@ -85,6 +96,33 @@ function runApp () {
 
     });
 
+    /*
+        Usage:
+           flif [-e] [encode options] <input image(s)> <output.flif>
+           flif [-d] [decode options] <input.flif> <output.pnm | output.pam | output.png>
+
+        Supported input/output image formats: PNG, PNM (PPM,PGM,PBM), PAM
+
+        General Options:
+           -h, --help                  show help (use -hvv for advanced options)
+           -v, --verbose               increase verbosity (multiple -v for more output)
+
+        Encode options: (-e, --encode)
+           -E, --effort=N              0=fast/poor compression, 100=slowest/best? (default: -E60
+           -I, --interlace             interlacing (default, except for tiny images)
+           -N, --no-interlace          force no interlacing
+           -Q, --lossy=N               lossy compression; default: -Q100 (lossless)
+           -K, --keep-invisible-rgb    store original RGB values behind A=0
+           -F, --frame-delay=N[,N,..]  delay between animation frames in ms; default: -F100
+
+        Decode options: (-d, --decode)
+           -i, --identify             do not decode, just identify the input FLIF file
+           -q, --quality=N            lossy decode quality percentage; default -q100
+           -s, --scale=N              lossy downscaled image at scale 1:N (2,4,8,16,32); default -s1
+           -r, --resize=WxH           lossy downscaled image to fit inside WxH (but typically smaller)
+           -f, --fit=WxH              lossy downscaled image to exactly WxH
+    */
+
     // Export the image based on the desired file type passed in
     function exportImage (type) {
         var input = ugui.args.fileToProcess.value;
@@ -93,14 +131,23 @@ function runApp () {
         ugui.helpers.runcmd(executableAndArguments);
     }
 
-
     function isFlif () {
         // Find the path to the settings file and store it
-        var outputLocation = path.join(gui.App.dataPath, 'output.png');
+        var inputFlif = ugui.args.fileToProcess.value;
+        var quality = ugui.args.quality.value;
+        var extension = 'png';
+        for (var arg in ugui.args) {
+            if (arg.indexOf('extension') === 0) {
+                if (ugui.args[arg].htmlticked) {
+                    extension = ugui.args[arg].value;
+                }
+            }
+        }
+        var outputLocation = path.join(appData, 'output.png');
 
         // Create a PNG from the imported FLIF file in a temp directory
         // flif.exe "C:\folder\cow.png" "C:\Users\Bob\AppData\Local\ugui_flif\output.png"
-        var executableAndArguments = flif + ' -d --quality=100 "' + ugui.args.fileToProcess.value + '" "' + outputLocation + '"';
+        var executableAndArguments = flif + ' -d --quality=' + quality + ' "' + inputFlif + '" "' + outputLocation + '"';
 
         var parameters = {
             'executableAndArgs': executableAndArguments,
@@ -116,30 +163,9 @@ function runApp () {
                     '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center">' +
                       '<h4 class="text-left">FLIF Preview</h4>' +
                       '<img src="' + outputLocation + '" alt="Flif Preview" />' +
-                    '</div>' +
-                    '<div class="col-xs-4 col-s-4 col-md-4 col-l-4 text-center">' +
-                      '<button id="pngExport" class="btn btn-sm btn-primary">Save as PNG</button>' +
-                    '</div>' +
-                    '<div class="col-xs-4 col-s-4 col-md-4 col-l-4 text-center">' +
-                      '<button id="pnmExport" class="btn btn-sm btn-primary">Save as PNM</button>' +
-                    '</div>' +
-                    '<div class="col-xs-4 col-s-4 col-md-4 col-l-4 text-center">' +
-                      '<button id="pamExport" class="btn btn-sm btn-primary">Save as PAM</button>' +
                     '</div>'
-               );
-                // If the user clicks one of the export buttons, create the export image next to the import image
-                $('#pngExport').click(function (evt) {
-                    evt.preventDefault();
-                    exportImage('png');
-                });
-                $('#pnmExport').click(function (evt) {
-                    evt.preventDefault();
-                    exportImage('pnm');
-                });
-                $('#pamExport').click(function (evt) {
-                    evt.preventDefault();
-                    exportImage('pam');
-                });
+                );
+                exportImage(extension);
             },
             'onError': function (err) {
                 // eslint-disable-next-line no-console
@@ -158,9 +184,6 @@ function runApp () {
         ugui.helpers.runcmdAdvanced(parameters);
     }
 
-
-
-
     function isPng () {
         // Put a spinner and loading message on the screen while converting to flif
         $('.outputContainer').html(
@@ -175,11 +198,17 @@ function runApp () {
         var nameExt = ugui.args.fileToProcess.nameExt;
         var fullPath = ugui.args.fileToProcess.value;
         var size = ugui.args.fileToProcess.size;
-        var inputFlif = ugui.args.fileToProcess.path + name + '.flif';
-        var iterations = ugui.args.repeats.value;
+        var outputFlif = ugui.args.fileToProcess.path + name + '.flif';
+        var effort = ugui.args.effort.value;
+        var interlace = ugui.args.interlacingauto.value;
+        if (ugui.args.interlacingoff.htmlticked) {
+            interlace = ' ' + ugui.args.interlacingoff.value;
+        } else if (ugui.args.interlacingon.htmlticked) {
+            interlace = ' ' + ugui.args.interlacingon.value;
+        }
 
         // flif.exe -d --quality=100 "C:\folder\cow.png" "C:\folder\cow.flif"
-        var executableAndArguments = flif + ' --repeats=' + iterations + ' "' + fullPath + '" "' + inputFlif + '"';
+        var executableAndArguments = flif + ' --encode --effort=' + effort + interlace + ' "' + fullPath + '" "' + outputFlif + '"';
 
         var parameters = {
             'executableAndArgs': executableAndArguments,
@@ -193,7 +222,7 @@ function runApp () {
                 // When the FLIF file has finished being exported and the flif.exe finishes
                 // Change the loading message to have details about the sizes of the input and output
                 function updateUI () {
-                    var flifSize = fs.statSync(inputFlif.split('\\').join('/')).size;
+                    var flifSize = fs.statSync(outputFlif.split('\\').join('/')).size;
                     var bytesSaved = size - flifSize;
                     var percent = Math.floor((flifSize / size) * 10000) / 100;
                     $('.outputContainer').html(
@@ -324,8 +353,11 @@ function runApp () {
     });
 
     // Remove modal, enable scrollbar
-    function removeModal () {
+    function removeModal (callback) {
         $('#settingsModal').slideUp('slow');
+        if (typeof callback === 'function') {
+            callback();
+        }
     }
 
 
@@ -334,51 +366,8 @@ function runApp () {
     // SETTINGS UI ELEMENTS
 
 
-    $('#repeats').slider({
-        'min': 0,
-        'max': 1000,
-        'value': parseInt($('#repeats').val()) || 3,
-        'scale': 'logarithmic',
-        'step': 1
-    });
 
-    $('#sliderSwitcher').click(function (event) {
-        event.stopPropagation();
-        if ($('#sliderSwitcher').hasClass('auto')) {
-            $('#repeats').slider('destroy');
-            $('#sliderSwitcher').removeClass('auto');
-            $('#sliderSwitcher').addClass('manual');
-            $('#sliderSwitcher').html('Slider');
-            $('#repeats').keypress(function (evt) {
-                // if what was typed isn't a number then don't put it in the box
-                if (evt.which != 8 && evt.which != 0 && (evt.which < 48 || evt.which > 57)) {
-                    return false;
-                }
-            });
-            $('#repeats').keyup(function () {
-                // If the value is less than 1, set it to 1
-                if ($('#repeats').val() < 1) {
-                    $('#repeats').val(1);
-                // if the value is greater than 1000, set it to 1000
-                } else if ($('#repeats').val() > 1000) {
-                    $('#repeats').val(1000);
-                }
-            });
-        } else {
-            var repeatsValue = parseInt($('#repeats').val() || 3);
-            var repeatsOptions = {
-                'min': 0,
-                'max': 1000,
-                'value': repeatsValue,
-                'scale': 'logarithmic',
-                'step': 1
-            };
-            $('#repeats').slider(repeatsOptions);
-            $('#sliderSwitcher').removeClass('manual');
-            $('#sliderSwitcher').addClass('auto');
-            $('#sliderSwitcher').html('Manual');
-        }
-    });
+
 
 
 
@@ -391,42 +380,62 @@ function runApp () {
 
 
     function settingsDefaults () {
-        // "REPEATS" DEFAULT OPTIONS
-        if ($('#sliderSwitcher').hasClass('auto')) {
-            $('#repeats').slider('destroy');
-        }
-        $('#repeats').slider({
-            'min': 0,
-            'max': 1000,
-            'value': 3,
-            'scale': 'logarithmic',
-            'step': 1
-        });
-        $('#sliderSwitcher').removeClass('manual');
-        $('#sliderSwitcher').addClass('auto');
-        $('#sliderSwitcher').html('Manual');
+        $('#effort').slider('setValue', effortDefaultValue);
+        $('#quality').slider('setValue', qualityDefaultValue);
     }
 
     function settingsCancel () {
-        // Load the stored copy of the original settings
-        ugui.helpers.loadSettings(originalSettings);
-        // 'REPEATS'
-        if ($('#sliderSwitcher').hasClass('auto')) {
-            $('#repeats').slider('destroy');
+        removeModal(function () {
+            // Load the stored copy of the original settings
+            ugui.helpers.loadSettings(originalSettings, function () {
+                // reset the contents of the settings modal back to what the original settings were
+                var effortValue = parseInt($('#effort').val() || effortDefaultValue);
+                $('#effort').slider('setValue', effortValue);
+
+                var qualityValue = parseInt($('#quality').val() || qualityDefaultValue);
+                $('#quality').slider('setValue', qualityValue);
+            });
+        });
+    }
+
+    function loadSettings () {
+        if (fs.existsSync(path.join(appData, 'uguisettings.json'))) {
+            ugui.helpers.loadSettings(function () {
+                var effortValue = parseInt($('#effort').val() || effortDefaultValue);
+                var effortOptions = {
+                    'min': 0,
+                    'max': 100,
+                    'value': effortValue,
+                    'step': 1
+                };
+                $('#effort').slider(effortOptions);
+
+                var qualityValue = parseInt($('#quality').val() || qualityDefaultValue);
+                var qualityOptions = {
+                    'min': 0,
+                    'max': 100,
+                    'value': qualityValue,
+                    'step': 1
+                };
+                $('#quality').slider(qualityOptions);
+            });
+        } else {
+            var effortOptions = {
+                'min': 0,
+                'max': 100,
+                'value': effortDefaultValue,
+                'step': 1
+            };
+            $('#effort').slider(effortOptions);
+
+            var qualityOptions = {
+                'min': 0,
+                'max': 100,
+                'value': qualityDefaultValue,
+                'step': 1
+            };
+            $('#quality').slider(qualityOptions);
         }
-        var repeatsValue = parseInt($('#repeats').val() || 3);
-        var repeatsOptions = {
-            'min': 0,
-            'max': 1000,
-            'value': repeatsValue,
-            'scale': 'logarithmic',
-            'step': 1
-        };
-        $('#repeats').slider(repeatsOptions);
-        $('#sliderSwitcher').removeClass('manual');
-        $('#sliderSwitcher').addClass('auto');
-        $('#sliderSwitcher').html('Manual');
-        removeModal();
     }
 
     function settingsSave () {
@@ -457,33 +466,5 @@ function runApp () {
 
 
 
-    /*
-
-        Usage:
-           flif [-e] [encode options] <input image(s)> <output.flif>
-           flif [-d] [decode options] <input.flif> <output.pnm | output.pam | output.png
-
-        Supported input/output image formats: PNG, PNM (PPM,PGM,PBM), PAM
-
-        General Options:
-           -h, --help                  show help (use -hvv for advanced options)
-           -v, --verbose               increase verbosity (multiple -v for more output)
-
-        Encode options: (-e, --encode)
-           -E, --effort=N              0=fast/poor compression, 100=slowest/best? (default: -E60)
-           -I, --interlace             interlacing (default, except for tiny images)
-           -N, --no-interlace          force no interlacing
-           -Q, --lossy=N               lossy compression; default: -Q100 (lossless)
-           -K, --keep-invisible-rgb    store original RGB values behind A=0
-           -F, --frame-delay=N[,N,..]  delay between animation frames in ms; default: -F100
-
-        Decode options: (-d, --decode)
-           -i, --identify             do not decode, just identify the input FLIF file
-           -q, --quality=N            lossy decode quality percentage; default -q100
-           -s, --scale=N              lossy downscaled image at scale 1:N (2,4,8,16,32); default -s1
-           -r, --resize=WxH           lossy downscaled image to fit inside WxH (but typically smaller)
-           -f, --fit=WxH              lossy downscaled image to exactly WxH
-
-    */
 
 } // end runApp();
