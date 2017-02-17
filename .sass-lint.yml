@@ -10,7 +10,7 @@ options:
   formatter: json
 # File Options
 files:
-  include: 'scout-files/_sass/*.s+(a|c)ss'
+  include: '_sass/*.s+(a|c)ss'
 # Rule Configuration
 rules:
   attribute-quotes: 2
