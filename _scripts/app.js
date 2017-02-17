@@ -1,4 +1,7 @@
 
+var $ = window.$;
+var ugui = window.ugui;
+
 // Wait for the document to load and for ugui.js to run before running your app's custom JS
 $(document).ready(runApp);
 
@@ -13,7 +16,7 @@ function runApp () {
 
 
 
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // IMPORTING A FILE
 
 
@@ -23,8 +26,9 @@ function runApp () {
     var gui = require('nw.gui');
     var win = gui.Window.get();
     var OS = process.platform;
-    var flif = 'executables\\win\\flif.exe';
-    var convert = 'executables\\win\\convert64.exe';
+    var flif = path.join('executables', 'win', 'flif64.exe');
+    // eslint-disable-next-line no-unused-vars
+    var convert = path.join('executables', 'win', 'convert64.exe');
 
     // NW.js only officially supports OSX 10.9+, Win Vista+, Ubuntu 12LTS and 14LTS
     // Detect if in `darwin`, `freebsd`, `linux`, `sunos`, or `win32`
@@ -33,6 +37,7 @@ function runApp () {
             flif = path.join('executables', 'win', 'flif64.exe');
             convert = path.join('executables', 'win', 'convert64.exe');
         } else {
+            flif = path.join('executables', 'win', 'flif32.exe');
             convert = path.join('executables', 'win', 'convert32.exe');
         }
     } else if (OS == 'darwin') {
@@ -100,9 +105,12 @@ function runApp () {
         var parameters = {
             'executableAndArgs': executableAndArguments,
             'returnedData': function (data) {
+                // eslint-disable-next-line no-console
                 console.log('The text from the executable: ' + data);
             },
             'onExit': function (code) {
+                // eslint-disable-next-line no-console
+                console.log('onExit: ' + code);
                 // When the PNG file is done being exported and flif.exe exits show it on the screen with export options
                 $('.outputContainer').html(
                     '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center">' +
@@ -134,12 +142,15 @@ function runApp () {
                 });
             },
             'onError': function (err) {
+                // eslint-disable-next-line no-console
+                console.log(err);
                 $('.outputContainer').html(errorMsg);
             },
             'onClose': function (code) {
                 if (code === 2) {
                     $('.outputContainer').html(errorMsg);
                 }
+                // eslint-disable-next-line no-console
                 console.log('Executable has closed with the exit code: ' + code);
             }
         };
@@ -173,9 +184,12 @@ function runApp () {
         var parameters = {
             'executableAndArgs': executableAndArguments,
             'returnedData': function (data) {
+                // eslint-disable-next-line no-console
                 console.log('The text from the executable: ' + data);
             },
             'onExit': function (code) {
+                // eslint-disable-next-line no-console
+                console.log('onExit: ' + code);
                 // When the FLIF file has finished being exported and the flif.exe finishes
                 // Change the loading message to have details about the sizes of the input and output
                 function updateUI () {
@@ -198,7 +212,7 @@ function runApp () {
                             '</tr>' +
                             '<tr>' +
                               '<th></th>' +
-                              '<td>' + percent  + '% of original</td>' +
+                              '<td>' + percent + '% of original</td>' +
                               '<td>' + bytesSaved + ' bytes saved</td>' +
                             '</tr>' +
                           '</table>' +
@@ -208,12 +222,15 @@ function runApp () {
                 window.setTimeout(updateUI, 3000);
             },
             'onError': function (err) {
+                // eslint-disable-next-line no-console
+                console.log(err);
                 $('.outputContainer').html(errorMsg);
             },
             'onClose': function (code) {
                 if (code === 2) {
                     $('.outputContainer').html(errorMsg);
                 }
+                // eslint-disable-next-line no-console
                 console.log('Executable has closed with the exit code: ' + code);
             }
         };
@@ -225,7 +242,7 @@ function runApp () {
 
 
 
-    ////////////////////////////////////////////////
+    // //////////////////////////////////////////////
     // HELP MENU
 
 
@@ -291,7 +308,7 @@ function runApp () {
 
 
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // SETTINGS MENU
 
 
@@ -313,7 +330,7 @@ function runApp () {
 
 
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // SETTINGS UI ELEMENTS
 
 
@@ -369,7 +386,7 @@ function runApp () {
 
 
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // EXIT SETTINGS
 
 
@@ -440,41 +457,33 @@ function runApp () {
 
 
 
-/*
+    /*
 
-Usage:
-   flif [-e] [encode options] <input image(s)> <output.flif>
-   flif [-d] [decode options] <input.flif> <output.pnm | output.pam | output.png
+        Usage:
+           flif [-e] [encode options] <input image(s)> <output.flif>
+           flif [-d] [decode options] <input.flif> <output.pnm | output.pam | output.png
 
-Supported input/output image formats: PNG, PNM (PPM,PGM,PBM), PAM
+        Supported input/output image formats: PNG, PNM (PPM,PGM,PBM), PAM
 
-General Options:
-   -h, --help                  show help (use -hvv for advanced options)
-   -v, --verbose               increase verbosity (multiple -v for more output)
+        General Options:
+           -h, --help                  show help (use -hvv for advanced options)
+           -v, --verbose               increase verbosity (multiple -v for more output)
 
-Encode options: (-e, --encode)
-   -E, --effort=N              0=fast/poor compression, 100=slowest/best? (default: -E60)
-   -I, --interlace             interlacing (default, except for tiny images)
-   -N, --no-interlace          force no interlacing
-   -Q, --lossy=N               lossy compression; default: -Q100 (lossless)
-   -K, --keep-invisible-rgb    store original RGB values behind A=0
-   -F, --frame-delay=N[,N,..]  delay between animation frames in ms; default: -F100
+        Encode options: (-e, --encode)
+           -E, --effort=N              0=fast/poor compression, 100=slowest/best? (default: -E60)
+           -I, --interlace             interlacing (default, except for tiny images)
+           -N, --no-interlace          force no interlacing
+           -Q, --lossy=N               lossy compression; default: -Q100 (lossless)
+           -K, --keep-invisible-rgb    store original RGB values behind A=0
+           -F, --frame-delay=N[,N,..]  delay between animation frames in ms; default: -F100
 
-Decode options: (-d, --decode)
-   -i, --identify             do not decode, just identify the input FLIF file
-   -q, --quality=N            lossy decode quality percentage; default -q100
-   -s, --scale=N              lossy downscaled image at scale 1:N (2,4,8,16,32); default -s1
-   -r, --resize=WxH           lossy downscaled image to fit inside WxH (but typically smaller)
-   -f, --fit=WxH              lossy downscaled image to exactly WxH
+        Decode options: (-d, --decode)
+           -i, --identify             do not decode, just identify the input FLIF file
+           -q, --quality=N            lossy decode quality percentage; default -q100
+           -s, --scale=N              lossy downscaled image at scale 1:N (2,4,8,16,32); default -s1
+           -r, --resize=WxH           lossy downscaled image to fit inside WxH (but typically smaller)
+           -f, --fit=WxH              lossy downscaled image to exactly WxH
 
-*/
-
-
-    // Force the Slider to update and display the correct value
-    function clickSliderSwitcher () {
-        $('#sliderSwitcher').trigger('click');
-    }
-    // setTimeout(clickSliderSwitcher, 250);
-    // setTimeout(clickSliderSwitcher, 500);
+    */
 
 } // end runApp();
