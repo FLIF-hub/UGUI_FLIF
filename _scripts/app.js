@@ -105,27 +105,46 @@ function runApp () {
         Usage:
            flif [-e] [encode options] <input image(s)> <output.flif>
            flif [-d] [decode options] <input.flif> <output.pnm | output.pam | output.png>
-
+           flif [-t] [decode options] [encode options] <input.flif> <output.flif>
         Supported input/output image formats: PNG, PNM (PPM,PGM,PBM), PAM
-
         General Options:
            -h, --help                  show help (use -hvv for advanced options)
            -v, --verbose               increase verbosity (multiple -v for more output)
-
+           -c, --no-crc                don't verify the CRC (or don't add a CRC)
+           -m, --no-metadata           strip Exif/XMP metadata (default is to keep it)
+           -p, --no-color-profile      strip ICC color profile (default is to keep it)
         Encode options: (-e, --encode)
-           -E, --effort=N              0=fast/poor compression, 100=slowest/best? (default: -E60
+           -E, --effort=N              0=fast/poor compression, 100=slowest/best? (default: -E60)
            -I, --interlace             interlacing (default, except for tiny images)
            -N, --no-interlace          force no interlacing
            -Q, --lossy=N               lossy compression; default: -Q100 (lossless)
            -K, --keep-invisible-rgb    store original RGB values behind A=0
            -F, --frame-delay=N[,N,..]  delay between animation frames in ms; default: -F100
-
+        Advanced encode options: (mostly useful for flifcrushing)
+           -P, --max-palette-size=N    max size for Palette(_Alpha); default: -P512
+           -A, --force-color-buckets   force Color_Buckets transform
+           -B, --no-color-buckets      disable Color_Buckets transform
+           -C, --no-channel-compact    disable Channel_Compact transform
+           -Y, --no-ycocg              disable YCoCg transform; use G(R-G)(B-G)
+           -W, --no-subtract-green     disable YCoCg and SubtractGreen transform; use GRB
+           -S, --no-frame-shape        disable Frame_Shape transform
+           -L, --max-frame-lookback=N  max nb of frames for Frame_Lookback; default: -L1
+           -R, --maniac-repeats=N      MANIAC learning iterations; default: -R2
+           -T, --maniac-threshold=N    MANIAC tree growth split threshold, in bits saved; default: -T64
+           -D, --maniac-divisor=N      MANIAC inner node count divisor; default: -D30
+           -M, --maniac-min-size=N     MANIAC post-pruning threshold; default: -M50
+           -X, --chance-cutoff=N       minimum chance (N/4096); default: -X2
+           -Z, --chance-alpha=N        chance decay factor; default: -Z19
+           -U, --adaptive              adaptive lossy, second input image is saliency map
+           -G, --guess=N[N..]          pixel predictor for each plane (Y,Co,Cg,Alpha,Lookback)
+                                       ?=pick heuristically, 0=avg, 1=median_grad, 2=median_nb, 3=mixed
+           -H, --invisible-guess=N     predictor for invisible pixels (only if -K is not used)
         Decode options: (-d, --decode)
-           -i, --identify             do not decode, just identify the input FLIF file
-           -q, --quality=N            lossy decode quality percentage; default -q100
-           -s, --scale=N              lossy downscaled image at scale 1:N (2,4,8,16,32); default -s1
-           -r, --resize=WxH           lossy downscaled image to fit inside WxH (but typically smaller)
-           -f, --fit=WxH              lossy downscaled image to exactly WxH
+           -i, --identify              do not decode, just identify the input FLIF file
+           -q, --quality=N             lossy decode quality percentage; default -q100
+           -s, --scale=N               lossy downscaled image at scale 1:N (2,4,8,16,32); default -s1
+           -r, --resize=WxH            lossy downscaled image to fit inside WxH (but typically smaller)
+           -f, --fit=WxH               lossy downscaled image to exactly WxH
     */
 
     // Export the image based on the desired file type passed in
