@@ -57,9 +57,22 @@ function runApp () {
         }
     }
     var errorMsg =
-      '<h4 class="text-danger text-center"><strong>There was an error.</strong></h4>' +
-      '<div class="text-warning text-center">Make sure you are using one of these file types:<br />' +
-      '<code>.FLIF .PNG .PNM .PPM .PGM .PBM .PAM</code></div>';
+        '<div class="alert alert-danger alert-dismissible" role="alert">' +
+          '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+            '<span aria-hidden="true">&times;</span>' +
+          '</button>' +
+          '<h5><strong>There was an error.</strong></h5>' +
+          '<div class="well well-sm text-primary">' +
+            'Make sure you are using one of these file types:<br /><br />' +
+            '<code>.FLIF .PNG .PNM .PPM .PGM .PBM .PAM</code><br /><br />' +
+            'If you use a <strong>different filetype</strong> we will attempt to convert ' +
+            'it to a temporary <code>PNG</code>, and then to <code>FLIF</code>. ' +
+            'If you continue to see this message, try converting your image to a ' +
+            '<code>PNG</code> in another program first before converting to FLIF.' +
+          '</div>' +
+        '</div>';
+    $('.outputContainer').html(errorMsg);
+
     // When the user opens the settings menu, we create a save file of their existing settings so
     // if they change anything and want to cancel we can reset the values to what it was when the
     // modal was first opened.
@@ -67,7 +80,6 @@ function runApp () {
 
     // Load settings if any were saved previously
     loadSettings();
-
 
 
 
@@ -96,9 +108,8 @@ function runApp () {
            ) {
             isPng();
         } else {
-            $('.outputContainer').html(errorMsg);
+            needsConverted();
         }
-
     });
 
     /*
@@ -146,6 +157,16 @@ function runApp () {
            -r, --resize=WxH            lossy downscaled image to fit inside WxH (but typically smaller)
            -f, --fit=WxH               lossy downscaled image to exactly WxH
     */
+
+    function showSpinner () {
+        // Put a spinner and loading message on the screen while converting to png or flif
+        $('.outputContainer').html(
+            '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center text-primary">' +
+              '<img src="_img/processing.svg" alt="Processing" class="spinner" />' +
+              'Processing' +
+            '</div>'
+        );
+    }
 
     // Export the image based on the desired file type passed in
     function exportImage (type) {
@@ -208,14 +229,13 @@ function runApp () {
         ugui.helpers.runcmdAdvanced(parameters);
     }
 
-    function isPng () {
-        // Put a spinner and loading message on the screen while converting to flif
-        $('.outputContainer').html(
-            '<div class="col-xs-12 col-s-12 col-md-12 col-l-12 text-center text-primary">' +
-              '<img src="_img/processing.svg" alt="Processing" class="spinner" />' +
-              'Processing' +
-            '</div>'
-        );
+    function isPng (converted) {
+        converted = converted || false;
+
+        // needsConverted() shows a spinner, if that wasn't ran first, we do it here
+        if (converted === false) {
+            showSpinner();
+        }
 
         // Variables
         var name = ugui.args.fileToProcess.name;
@@ -231,8 +251,12 @@ function runApp () {
         } else if (ugui.args.interlacingon.htmlticked) {
             interlace = ' ' + ugui.args.interlacingon.value;
         }
+        if (converted) {
+            fullPath = path.join(appData, 'converted.png');
+        }
 
-        // flif.exe -d --quality=100 "C:\folder\cow.png" "C:\folder\cow.flif"
+        // flif.exe --encode -N --effort=100 --lossy=100 "C:\folder\cow.png" "C:\folder\cow.flif"
+        // flif.exe --encode -I --effort=100 --lossy=100 "C:\Users\Bob\AppData\Local\ugui_flif\converted.png" "C:\folder\cow.flif"
         var executableAndArguments =
             flif +
             ' --encode' +
@@ -282,6 +306,46 @@ function runApp () {
                 }
                 updateUI();
                 window.setTimeout(updateUI, 3000);
+            },
+            'onError': function (err) {
+                // eslint-disable-next-line no-console
+                console.log(err);
+                $('.outputContainer').html(errorMsg);
+            },
+            'onClose': function (code) {
+                if (code === 2) {
+                    $('.outputContainer').html(errorMsg);
+                }
+                // eslint-disable-next-line no-console
+                console.log('Executable has closed with the exit code: ' + code);
+            }
+        };
+        // run the params above
+        ugui.helpers.runcmdAdvanced(parameters);
+    }
+
+    function needsConverted () {
+        showSpinner();
+
+        // Variables
+        var inputFile = ugui.args.fileToProcess.value;
+        var outputFile = path.join(appData, 'converted.png');
+
+        // convert "C:\folder\cow.jpg" "C:\Users\Bob\AppData\Local\ugui_flif\converted.png"
+        var executableAndArguments = convert + ' ' + inputFile + ' ' + outputFile;
+
+        var parameters = {
+            'executableAndArgs': executableAndArguments,
+            'returnedData': function (data) {
+                // eslint-disable-next-line no-console
+                console.log('The text from the executable: ' + data);
+            },
+            'onExit': function (code) {
+                // eslint-disable-next-line no-console
+                console.log('onExit: ' + code);
+                window.setTimeout(function () {
+                    isPng(true);
+                }, 3000);
             },
             'onError': function (err) {
                 // eslint-disable-next-line no-console
