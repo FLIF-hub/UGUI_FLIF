@@ -22,7 +22,7 @@ function runApp () {
     var nw = require('nw.gui');
 
     // SHOW DEVELOPER TOOLS
-    nw.Window.get().showDevTools();
+    // nw.Window.get().showDevTools();
 
     var appData = nw.App.dataPath;
     var win = nw.Window.get();
@@ -558,6 +558,11 @@ function runApp () {
     // //////////////////////////////////////////////////////
     // SETTINGS MENU
 
+
+    $('.navbar a[href="#refresh"]').click(function (event) {
+        event.stopPropagation();
+        win.reload();
+    });
 
     // Clicking "About" in the Nav Bar
     $('.navbar a[href="#settings"]').click(function (event) {
