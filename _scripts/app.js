@@ -22,7 +22,7 @@ function runApp () {
     var nw = require('nw.gui');
 
     // SHOW DEVELOPER TOOLS
-    // nw.Window.get().showDevTools();
+    nw.Window.get().showDevTools();
 
     var appData = nw.App.dataPath;
     var win = nw.Window.get();
@@ -71,7 +71,6 @@ function runApp () {
             '<code>PNG</code> in another program first before converting to FLIF.' +
           '</div>' +
         '</div>';
-    $('.outputContainer').html(errorMsg);
 
     // When the user opens the settings menu, we create a save file of their existing settings so
     // if they change anything and want to cancel we can reset the values to what it was when the
@@ -80,6 +79,24 @@ function runApp () {
 
     // Load settings if any were saved previously
     loadSettings();
+
+    function copyFile (from, to) {
+        var readStream = fs.createReadStream(from);
+        readStream.on('error', function (err) {
+            // eslint-disable-next-line no-console
+            console.log(err);
+        });
+        var writeStream = fs.createWriteStream(to);
+        writeStream.on('error', function (err) {
+            // eslint-disable-next-line no-console
+            console.log(err);
+        });
+        writeStream.on('close', function (exit) {
+            // eslint-disable-next-line no-console
+            console.log(exit);
+        });
+        readStream.pipe(writeStream);
+    }
 
 
 
@@ -241,6 +258,9 @@ function runApp () {
         var name = ugui.args.fileToProcess.name;
         var nameExt = ugui.args.fileToProcess.nameExt;
         var fullPath = ugui.args.fileToProcess.value;
+        if (converted) {
+            fullPath = path.join(appData, 'converted.png');
+        }
         var size = ugui.args.fileToProcess.size;
         var outputFlif = ugui.args.fileToProcess.path + name + '.flif';
         var effort = ugui.args.effort.value;
@@ -250,9 +270,9 @@ function runApp () {
             interlace = ' ' + ugui.args.interlacingoff.value;
         } else if (ugui.args.interlacingon.htmlticked) {
             interlace = ' ' + ugui.args.interlacingon.value;
-        }
-        if (converted) {
-            fullPath = path.join(appData, 'converted.png');
+        } else if (ugui.args.interlacingboth.htmlticked) {
+            interlace = ' ' + ugui.args.interlacingboth.value;
+            outputFlif = path.join(appData, 'interlaced.flif');
         }
 
         // flif.exe --encode -N --effort=100 --lossy=100 "C:\folder\cow.png" "C:\folder\cow.flif"
@@ -275,7 +295,6 @@ function runApp () {
             'onExit': function (code) {
                 // eslint-disable-next-line no-console
                 console.log('onExit: ' + code);
-                // When the FLIF file has finished being exported and the flif.exe finishes
                 // Change the loading message to have details about the sizes of the input and output
                 function updateUI () {
                     var flifSize = fs.statSync(outputFlif.split('\\').join('/')).size;
@@ -304,8 +323,110 @@ function runApp () {
                         '</div>'
                     );
                 }
-                updateUI();
-                window.setTimeout(updateUI, 3000);
+                // When the FLIF file has finished being exported and the flif.exe finishes
+                if (ugui.args.interlacingboth.htmlticked) {
+                    // Check to see if a non-interlaced version of the file would be smaller.
+                    compareInterlacingSizes(converted);
+                } else {
+                    updateUI();
+                    window.setTimeout(updateUI, 3000);
+                }
+            },
+            'onError': function (err) {
+                // eslint-disable-next-line no-console
+                console.log(err);
+                $('.outputContainer').html(errorMsg);
+            },
+            'onClose': function (code) {
+                if (code === 2) {
+                    $('.outputContainer').html(errorMsg);
+                }
+                // eslint-disable-next-line no-console
+                console.log('Executable has closed with the exit code: ' + code);
+            }
+        };
+        // run the params above
+        ugui.helpers.runcmdAdvanced(parameters);
+    }
+
+    function compareInterlacingSizes (converted) {
+        // Variables
+        var name = ugui.args.fileToProcess.name;
+        var nameExt = ugui.args.fileToProcess.nameExt;
+        var fullPath = ugui.args.fileToProcess.value;
+        if (converted) {
+            fullPath = path.join(appData, 'converted.png');
+        }
+        var effort = ugui.args.effort.value;
+        var lossy = ugui.args.lossy.value;
+        var interlace = ' ' + ugui.args.interlacingon.value;
+        var outputFlif = path.join(appData, 'noninterlaced.flif');
+
+        // flif.exe --encode -N --effort=100 --lossy=100 "C:\folder\cow.png" "C:\Users\Bob\AppData\Local\ugui_flif\noninterlaced.flif"
+        var executableAndArguments =
+            flif +
+            ' --encode' +
+            interlace +
+            ' --effort=' + effort +
+            ' --lossy=' + lossy +
+            ' "' + fullPath + '"' +
+            ' "' + outputFlif + '"';
+
+        var parameters = {
+            'executableAndArgs': executableAndArguments,
+            'returnedData': function (data) {
+                // eslint-disable-next-line no-console
+                console.log('The text from the executable: ' + data);
+            },
+            'onExit': function (code) {
+                // eslint-disable-next-line no-console
+                console.log('onExit: ' + code);
+
+                ugui.helpers.getFileSize(path.join(appData, 'interlaced.flif'), function (interlaced) {
+                    ugui.helpers.getFileSize(path.join(appData, 'noninterlaced.flif'), function (noninterlaced) {
+                        var smallerFlif = path.join(appData, 'interlaced.flif');
+                        var flifSize = interlaced.bytes;
+                        var size = ugui.args.fileToProcess.size;
+                        if (interlaced.bytes > noninterlaced.bytes) {
+                            smallerFlif = path.join(appData, 'noninterlaced.flif');
+                            flifSize = noninterlaced.bytes;
+                        }
+                        var destinationFlif = ugui.args.fileToProcess.path + name + '.flif';
+                        copyFile(smallerFlif, destinationFlif);
+
+                        // When the FLIF file has finished being exported and the flif.exe finishes
+                        // Change the loading message to have details about the sizes of the input and output
+                        function updateUI () {
+                            var bytesSaved = size - flifSize;
+                            var percent = Math.floor((flifSize / size) * 10000) / 100;
+                            $('.outputContainer').html(
+                                '<div class="col-xs-12 col-s-12 col-md-12 col-l-12">' +
+                                  '<h4>Output Comparison</h4>' +
+                                  '<table class="table">' +
+                                    '<tr>' +
+                                      '<th>Input</th>' +
+                                      '<td>' + nameExt + '</td>' +
+                                      '<td>' + size + ' bytes</td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                      '<th>Output</th>' +
+                                      '<td>' + name + '.flif</td>' +
+                                      '<td>' + flifSize + ' bytes</td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                      '<th></th>' +
+                                      '<td>' + percent + '% of original</td>' +
+                                      '<td>' + bytesSaved + ' bytes saved</td>' +
+                                    '</tr>' +
+                                  '</table>' +
+                                '</div>'
+                            );
+                        }
+
+                        updateUI();
+                        window.setTimeout(updateUI, 3000);
+                    });
+                });
             },
             'onError': function (err) {
                 // eslint-disable-next-line no-console

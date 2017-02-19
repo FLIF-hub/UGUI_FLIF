@@ -259,12 +259,13 @@
                     </div>
 
                     <div class="btn-group">
-                      <label><strong>Interlacing</strong><br />Auto will turn interlacing on by default except for very small images.</label><br />
+                      <label><strong>Interlacing</strong><br />"Auto" will turn interlacing on by default except for very small images. "Both" will try with interlacing on and off, and then return whichever has a smaller filesize.</label><br />
                       <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Auto <span class="caret"></span></button>
                       <ul class="dropdown-menu">
                         <li><input type="radio" name="interlacing" data-argName="interlacingauto" id="interlacingauto" value=""  checked="checked" /><label for="interlacingauto" >Auto</label></li>
                         <li><input type="radio" name="interlacing" data-argName="interlacingon"   id="interlacingon"   value="-I"                  /><label for="interlacingon"   >On</label></li>
                         <li><input type="radio" name="interlacing" data-argName="interlacingoff"  id="interlacingoff"  value="-N"                  /><label for="interlacingoff"  >Off</label></li>
+                        <li><input type="radio" name="interlacing" data-argName="interlacingboth" id="interlacingboth" value="-I"                  /><label for="interlacingboth" >Both</label></li>
                       </ul>
                     </div>
                   </form>
