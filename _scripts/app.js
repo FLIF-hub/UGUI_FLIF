@@ -19,6 +19,7 @@ function runApp () {
     // Variables
     var fs = require('fs');
     var path = require('path');
+    var semver = require('semver');
     var nw = require('nw.gui');
 
     // SHOW DEVELOPER TOOLS
@@ -492,44 +493,13 @@ function runApp () {
     // //////////////////////////////////////////////
     // HELP MENU
 
-
-
-
-    // When the user clicks the button in the help menu, contact Github and check for updates
-    function checkForUpdates () {
-        $.get('https://api.github.com/repos/FLIF-Hub/UGUI_FLIF/releases', function (data) {
-
-            // 0.2.0
-            var remoteVersion = data[0].tag_name.split('v')[1];
-            var localVersion = ugui.app.version;
-            // [ '0', '2', '0' ]
-            var remoteVersionSplit = remoteVersion.split('.');
-            var localVersionSplit = localVersion.split('.');
-            var rvs = remoteVersionSplit;
-            var lvs = localVersionSplit;
-            // Check if the Major, Minor, or Patch have been updated on the remote
-            if (
-                 (rvs[0] > lvs[0]) ||
-                 (rvs[0] == lvs[0] && rvs[1] > lvs[1]) ||
-                 (rvs[0] == lvs[0] && rvs[1] == lvs[1] && rvs[2] > lvs[2])
-               ) {
-                $('.updateResults').html(
-                    '<p>' +
-                      'Update found! ' +
-                      '<a href="' + data[0].assets[0].browser_download_url + '" class="external-link">Download ZIP</a> or ' +
-                      '<a href="' + data[0].html_url + '" class="external-link">view release notes</a>.' +
-                    '</p>'
-                );
-                ugui.helpers.openDefaultBrowser();
-            } else {
-                $('.updateResults').html('<p class="text-center"><strong>You have the latest version of UGUI: FLIF.</strong></p>');
-            }
-        });
-    }
-
-    $('#updateChecker').click(checkForUpdates);
-
-
+    $('.navbar a[href="#about"]').mousedown(function (evt) {
+        if (evt.which === 3) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            win.showDevTools();
+        }
+    });
 
     function setContentHeight () {
         var navHeight = $('.navbar').height();
@@ -544,13 +514,81 @@ function runApp () {
             settingsHeight = newHeight - 39;
         }
         $('#appHolder').css('height', newHeight + 'px');
-        $('#settingsModal .modal-content').css('height', newHeight + 'px');
-        $('#settingsModal .modal-body').css('height', settingsHeight + 'px');
+        $('#settingsModal .modal-content').css('max-height', newHeight + 'px');
+        $('#settingsModal .modal-body').css('max-height', settingsHeight + 'px');
         window.setTimeout(ugui.helpers.centerNavLogo, 71);
     }
 
     setContentHeight();
     win.on('resize', setContentHeight);
+
+
+
+
+
+    // //////////////////////////////////////////////
+    // UPDATE NAV/MODAL
+
+    // Contact GitHub API and check for updates
+    function checkForUpdates () {
+        var rightNow = Date.now();
+        var lastCheck = window.runApp.lastCheck;
+        // The amount of seconds since the last time we checked
+        var timeSinceLastCheck = Math.round((rightNow - lastCheck) / 1000);
+
+        var iconHidden = $('.glyphicon-download-alt').hasClass('hide');
+
+        // limit checking for updates to once a minute
+        if (iconHidden && (timeSinceLastCheck > 60 || !lastCheck)) {
+
+            $.get('https://api.github.com/repos/FLIF-Hub/UGUI_FLIF/releases', function (data) {
+
+                // 0.2.0
+                var remoteVersion = data[0].tag_name.split('v')[1];
+                var localVersion = ugui.app.version;
+
+                if (semver.gt(remoteVersion, localVersion)) {
+                    $('.glyphicon-download-alt').removeClass('hide');
+
+                    $('.updateResults').html(
+                        '<div class="well alert">' +
+                          '<strong>' +
+                            'Update found! ' +
+                            '<a href="' + data[0].assets[0].browser_download_url + '" class="external-link">Download ZIP</a> or ' +
+                            '<a href="' + data[0].html_url + '" class="external-link">view release notes</a>.' +
+                          '</strong>' +
+                        '</div>'
+                    );
+
+                    ugui.helpers.openDefaultBrowser();
+                }
+            });
+            window.runApp.lastCheck = rightNow;
+        }
+    }
+
+    $('.navbar a[href="#update"]').click(function () {
+        $('#updateModal').fadeIn();
+    });
+
+    // When clicking on background or X, remove modal
+    $('#updateModal').click(removeModal);
+    // Allow you to click in the modal without triggering the `removeModal` function called when you click its parent element
+    $('#updateModal .modal-content').click(function (evt) {
+        evt.stopPropagation();
+    });
+    $('#updateModal .glyphicon-remove').click(removeModal);
+
+    ugui.helpers.loadSettings(function () {
+        ugui.helpers.buildUGUIArgObject();
+        if (ugui.args.automaticupdates.htmlticked) {
+            checkForUpdates();
+        }
+    });
+
+
+
+
 
 
 
@@ -577,7 +615,7 @@ function runApp () {
 
     // Remove modal, enable scrollbar
     function removeModal (callback) {
-        $('#settingsModal').slideUp('slow');
+        $('.modal').slideUp('slow');
         if (typeof callback === 'function') {
             callback();
         }
@@ -685,6 +723,11 @@ function runApp () {
     function settingsSave () {
         ugui.helpers.buildUGUIArgObject();
         ugui.helpers.saveSettings();
+        if (ugui.args.automaticupdates.htmlticked) {
+            checkForUpdates();
+        } else {
+            $('.glyphicon-download-alt').addClass('hide');
+        }
         removeModal();
     }
 

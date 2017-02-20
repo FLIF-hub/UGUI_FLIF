@@ -3213,7 +3213,33 @@ function loadSettings (customLocation, callback) {
             console.warn(º + '"' + settingsFile + '"', consoleCode);
             console.warn(º + 'Error:', consoleBold);
             console.warn(º + err.message, consoleError);
-            return;
+
+
+
+
+
+            // THIS WAS ADDED IN FOR UGUI: FLIF
+
+
+            // If a callback function was passed into `saveSettings`, run it
+            if (typeof(callback) === 'function') {
+                callback();
+            } else if (typeof(customLocation) === 'function') {
+                customLocation();
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Load the file if it's found
         } else {
             var settingsObj = JSON.parse(data);

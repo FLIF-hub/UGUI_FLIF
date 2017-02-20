@@ -23,6 +23,7 @@
     <cmd executable="flif"></cmd>
     <cmd executable="flifEncodeSettings"></cmd>
     <cmd executable="flifDecodeSettings"></cmd>
+    <cmd executable="updateSettings"></cmd>
 
   </head>
 
@@ -57,10 +58,11 @@
       <div class="container">
         <div class="navbar-header">
           <div class="navIcons">
-            <a title="Refresh"  href="#refresh"  class="drag-disable glyphicon glyphicon-refresh"       aria-hidden="true"><span class="sr-only">Refresh</span></a>
-            <a title="Settings" href="#settings" class="drag-disable glyphicon glyphicon-cog"           aria-hidden="true"><span class="sr-only">Settings</span></a>
-            <a title="About"    href="#about"    class="drag-disable glyphicon glyphicon-question-sign" aria-hidden="true"><span class="sr-only">About</span></a>
-            <a title="Exit"     href="#exit"     class="drag-disable glyphicon glyphicon-remove-sign"   aria-hidden="true"><span class="sr-only">Exit</span></a>
+            <a title="Update"   href="#update"   class="drag-disable glyphicon glyphicon-download-alt hide" aria-hidden="true"><span class="sr-only">Update</span></a>
+            <a title="Refresh"  href="#refresh"  class="drag-disable glyphicon glyphicon-refresh"           aria-hidden="true"><span class="sr-only">Refresh</span></a>
+            <a title="Settings" href="#settings" class="drag-disable glyphicon glyphicon-cog"               aria-hidden="true"><span class="sr-only">Settings</span></a>
+            <a title="About"    href="#about"    class="drag-disable glyphicon glyphicon-question-sign"     aria-hidden="true"><span class="sr-only">About</span></a>
+            <a title="Exit"     href="#exit"     class="drag-disable glyphicon glyphicon-remove-sign"       aria-hidden="true"><span class="sr-only">Exit</span></a>
           </div>
           <a class="navbar-brand">
             <img src="_img/white.png" alt="FLIF Logo" />
@@ -69,10 +71,11 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav" style="float:right">
-            <li><a title="Refresh"  href="#refresh"  class="drag-disable glyphicon glyphicon-refresh"       aria-hidden="true"><span class="sr-only">Refresh</span></a></li>
-            <li><a title="Settings" href="#settings" class="drag-disable glyphicon glyphicon-cog"           aria-hidden="true"><span class="sr-only">Settings</span></a></li>
-            <li><a title="About"    href="#about"    class="drag-disable glyphicon glyphicon-question-sign" aria-hidden="true"><span class="sr-only">About</span></a></li>
-            <li><a title="Exit"     href="#exit"     class="drag-disable glyphicon glyphicon-remove-sign"   aria-hidden="true"><span class="sr-only">Exit</span></a></li>
+            <li><a title="Update"   href="#update"   class="drag-disable glyphicon glyphicon-download-alt hide" aria-hidden="true"><span class="sr-only">Update</span></a></li>
+            <li><a title="Refresh"  href="#refresh"  class="drag-disable glyphicon glyphicon-refresh"           aria-hidden="true"><span class="sr-only">Refresh</span></a></li>
+            <li><a title="Settings" href="#settings" class="drag-disable glyphicon glyphicon-cog"               aria-hidden="true"><span class="sr-only">Settings</span></a></li>
+            <li><a title="About"    href="#about"    class="drag-disable glyphicon glyphicon-question-sign"     aria-hidden="true"><span class="sr-only">About</span></a></li>
+            <li><a title="Exit"     href="#exit"     class="drag-disable glyphicon glyphicon-remove-sign"       aria-hidden="true"><span class="sr-only">Exit</span></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -207,6 +210,34 @@
 
 
 
+      <!--
+        /////////////////////////////////////////////////////////////////
+        //                                                             //
+        //                        UPDATES MODAL                        //
+        //                                                             //
+        /////////////////////////////////////////////////////////////////
+        // We check for updates on launch and display an icon in the   //
+        // navigation. Clicking the icon will display this modal with  //
+        // instructions to how to update.                              //
+        /////////////////////////////////////////////////////////////////
+      -->
+
+      <div id="updateModal" class="modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <span class="glyphicon glyphicon-remove pull-right" data-dismiss="modal" aria-hidden="true"></span>
+              <h4>Update UGUI: FLIF</h4>
+            </div>
+            <div class="modal-body">
+              <p class="updateResults"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
 
 
       <!--
@@ -230,88 +261,110 @@
               <h4>UGUI: FLIF Settings</h4>
             </div>
             <div class="modal-body">
+              <div class="row">
 
-              <div class="panel panel-primary">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Encode to FLIF</h3>
+                <div class="col-xs-12 col-s-12 col-md-6 col-l-6">
+                  <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Encode to FLIF</h3>
+                    </div>
+                    <div class="panel-body">
+
+                      <form id="flifEncodeSettings" role="form-inline">
+                        <div class="row">
+                          <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
+                            <label for="effort"><strong>Effort</strong><br />More iterations increases CPU cycles, but results in better trees and thus smaller files. Default Setting is 60.</label>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
+                            <input id="effort" type="number" data-argName="effort" data-slider-id="effortSlider" class="form-control" />
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
+                            <label for="lossy"><strong>Lossy</strong><br />100 is lossless encoding, meaning your FLIF will be pixel-for-pixel identical to your original image. Below 100 will modify the image to have better compression.</label>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
+                            <input id="lossy" type="number" data-argName="lossy" data-slider-id="lossySlider" class="form-control" />
+                          </div>
+                        </div>
+
+                        <div class="btn-group">
+                          <label><strong>Interlacing</strong><br />"Auto" will turn interlacing on by default except for very small images. "Both" will try with interlacing on and off, and then return whichever has a smaller filesize (takes twice as long).</label><br />
+                          <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Auto <span class="caret"></span></button>
+                          <ul class="dropdown-menu">
+                            <li><input type="radio" name="interlacing" data-argName="interlacingauto" id="interlacingauto" value=""  checked="checked" /><label for="interlacingauto" >Auto</label></li>
+                            <li><input type="radio" name="interlacing" data-argName="interlacingon"   id="interlacingon"   value="-I"                  /><label for="interlacingon"   >On</label></li>
+                            <li><input type="radio" name="interlacing" data-argName="interlacingoff"  id="interlacingoff"  value="-N"                  /><label for="interlacingoff"  >Off</label></li>
+                            <li><input type="radio" name="interlacing" data-argName="interlacingboth" id="interlacingboth" value="-I"                  /><label for="interlacingboth" >Both</label></li>
+                          </ul>
+                        </div>
+                      </form>
+
+                    </div>
+                  </div>
                 </div>
-                <div class="panel-body">
 
-                  <form id="flifEncodeSettings" role="form-inline">
-                    <div class="row">
-                      <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
-                        <label for="effort"><strong>Effort</strong><br />More iterations increases CPU cycles, but results in better trees and thus smaller files. Default Setting is 60.</label>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
-                        <input id="effort" type="number" data-argName="effort" data-slider-id="effortSlider" class="form-control" />
-                      </div>
-                    </div>
 
-                    <div class="row">
-                      <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
-                        <label for="lossy"><strong>Lossy</strong><br />100 is lossless encoding, meaning your FLIF will be pixel-for-pixel identical to your original image. Below 100 will modify the image to have better compression.</label>
-                      </div>
+                <div class="col-xs-12 col-s-12 col-md-6 col-l-6 pull-right">
+                  <div class="panel panel-info">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Decode from FLIF</h3>
                     </div>
-                    <div class="row">
-                      <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
-                        <input id="lossy" type="number" data-argName="lossy" data-slider-id="lossySlider" class="form-control" />
-                      </div>
-                    </div>
+                    <div class="panel-body">
 
-                    <div class="btn-group">
-                      <label><strong>Interlacing</strong><br />"Auto" will turn interlacing on by default except for very small images. "Both" will try with interlacing on and off, and then return whichever has a smaller filesize.</label><br />
-                      <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Auto <span class="caret"></span></button>
-                      <ul class="dropdown-menu">
-                        <li><input type="radio" name="interlacing" data-argName="interlacingauto" id="interlacingauto" value=""  checked="checked" /><label for="interlacingauto" >Auto</label></li>
-                        <li><input type="radio" name="interlacing" data-argName="interlacingon"   id="interlacingon"   value="-I"                  /><label for="interlacingon"   >On</label></li>
-                        <li><input type="radio" name="interlacing" data-argName="interlacingoff"  id="interlacingoff"  value="-N"                  /><label for="interlacingoff"  >Off</label></li>
-                        <li><input type="radio" name="interlacing" data-argName="interlacingboth" id="interlacingboth" value="-I"                  /><label for="interlacingboth" >Both</label></li>
-                      </ul>
-                    </div>
-                  </form>
+                      <form id="flifDecodeSettings" role="form-inline">
+                        <div class="btn-group">
+                          <label><strong>Output Filetype</strong><br />File format to convert your FLIF to. Default is .PNG.</label><br />
+                          <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">.PNG <span class="caret"></span></button>
+                          <ul class="dropdown-menu">
+                            <li><input type="radio" name="extension" data-argName="extensionpng" id="extensionpng" value="png" checked="checked" /><label for="extensionpng" >.PNG</label></li>
+                            <li><input type="radio" name="extension" data-argName="extensionpnm" id="extensionpnm" value="pnm"                   /><label for="extensionpnm" >.PNM</label></li>
+                            <li><input type="radio" name="extension" data-argName="extensionppm" id="extensionppm" value="ppm"                   /><label for="extensionppm" >.PPM</label></li>
+                            <li><input type="radio" name="extension" data-argName="extensionpgm" id="extensionpgm" value="pgm"                   /><label for="extensionpgm" >.PGM</label></li>
+                            <li><input type="radio" name="extension" data-argName="extensionpbm" id="extensionpbm" value="pbm"                   /><label for="extensionpbm" >.PBM</label></li>
+                            <li><input type="radio" name="extension" data-argName="extensionpam" id="extensionpam" value="pam"                   /><label for="extensionpam" >.PAM</label></li>
+                          </ul>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
+                            <label for="quality"><strong>Quality</strong><br />Default is 100.</label>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
+                            <input id="quality" type="number" data-argName="quality" data-slider-id="qualitySlider" class="form-control" />
+                          </div>
+                        </div>
+                      </form>
 
+                    </div>
+                  </div>
                 </div>
+
+
+                <div class="col-xs-12 col-s-12 col-md-6 col-l-6">
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Updates</h3>
+                    </div>
+                    <div class="panel-body">
+                      <form id="updateSettings" role="form-inline">
+                        <p class="small">
+                          <label><input type="checkbox" data-argName="automaticupdates" checked="checked" /> Check for updates auotmatically.</label>
+                        </p>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
-
-
-              <div class="panel panel-info">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Decode from FLIF</h3>
-                </div>
-                <div class="panel-body">
-
-                  <form id="flifDecodeSettings" role="form-inline">
-                    <div class="btn-group">
-                      <label><strong>Output Filetype</strong><br />File format to convert your FLIF to. Default is .PNG.</label><br />
-                      <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">.PNG <span class="caret"></span></button>
-                      <ul class="dropdown-menu">
-                        <li><input type="radio" name="extension" data-argName="extensionpng" id="extensionpng" value="png" checked="checked" /><label for="extensionpng" >.PNG</label></li>
-                        <li><input type="radio" name="extension" data-argName="extensionpnm" id="extensionpnm" value="pnm"                   /><label for="extensionpnm" >.PNM</label></li>
-                        <li><input type="radio" name="extension" data-argName="extensionppm" id="extensionppm" value="ppm"                   /><label for="extensionppm" >.PPM</label></li>
-                        <li><input type="radio" name="extension" data-argName="extensionpgm" id="extensionpgm" value="pgm"                   /><label for="extensionpgm" >.PGM</label></li>
-                        <li><input type="radio" name="extension" data-argName="extensionpbm" id="extensionpbm" value="pbm"                   /><label for="extensionpbm" >.PBM</label></li>
-                        <li><input type="radio" name="extension" data-argName="extensionpam" id="extensionpam" value="pam"                   /><label for="extensionpam" >.PAM</label></li>
-                      </ul>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-12 col-s-12 col-md-12 col-l-12">
-                        <label for="quality"><strong>Quality</strong><br />Default is 100.</label>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-10 col-xs-offset-1 col-s-10 col-s-offset-1 col-md-10 col-md-offset-1 col-l-10 col-l-offset-1 vcenter">
-                        <input id="quality" type="number" data-argName="quality" data-slider-id="qualitySlider" class="form-control" />
-                      </div>
-                    </div>
-                  </form>
-
-                </div>
-              </div>
-
-              <div class="text-right">
+              <div class="row text-right">
                 <button id="settingsDefaults" class="btn btn-primary" title="Load the default settings.">Defaults</button>
                 <button id="settingsCancel"   class="btn btn-danger"  title="Use previous settings.">Cancel</button>
                 <button id="settingsSave"     class="btn btn-success" title="Keep these settings.">Save</button>
@@ -362,10 +415,6 @@
                   </p>
                   <p>
                     <a href="https://github.com/FLIF-hub/UGUI_FLIF" class="external-link applicationTitle">UGUI: FLIF</a> uses version 6.9.2-3 (Q16 Sept. 9, 2015 Build) of the CLI version of ImageMagick found here: <a href="http://www.imagemagick.org" class="external-link">ImageMagick.org</a>. ImageMagick is &copy;1999-2017 ImageMagick Studio LLC, <a href="http://www.imagemagick.org/script/license.php" class="external-link">License</a>.
-                  </p>
-                  <p class="updateResults"></p>
-                  <p class="text-center">
-                    <button id="updateChecker" class="btn btn-primary">Check for updates</button>
                   </p>
 
                   Contributors to the UGUI: FLIF<br />
