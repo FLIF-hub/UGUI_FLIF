@@ -207,6 +207,9 @@ function runApp () {
             }
         }
         var outputLocation = path.join(appData, 'output.png');
+        if (fs.existsSync(outputLocation)) {
+            fs.unlinkSync(outputLocation);
+        }
 
         // Create a PNG from the imported FLIF file in a temp directory
         // flif.exe "C:\folder\cow.png" "C:\Users\Bob\AppData\Local\ugui_flif\output.png"
@@ -274,6 +277,9 @@ function runApp () {
         } else if (ugui.args.interlacingboth.htmlticked) {
             interlace = ' ' + ugui.args.interlacingboth.value;
             outputFlif = path.join(appData, 'interlaced.flif');
+            if (fs.existsSync(outputFlif)) {
+                fs.unlinkSync(outputFlif);
+            }
         }
 
         // flif.exe --encode -N --effort=100 --lossy=100 "C:\folder\cow.png" "C:\folder\cow.flif"
@@ -362,6 +368,9 @@ function runApp () {
         var lossy = ugui.args.lossy.value;
         var interlace = ' ' + ugui.args.interlacingon.value;
         var outputFlif = path.join(appData, 'noninterlaced.flif');
+        if (fs.existsSync(outputFlif)) {
+            fs.unlinkSync(outputFlif);
+        }
 
         // flif.exe --encode -N --effort=100 --lossy=100 "C:\folder\cow.png" "C:\Users\Bob\AppData\Local\ugui_flif\noninterlaced.flif"
         var executableAndArguments =
@@ -452,6 +461,9 @@ function runApp () {
         // Variables
         var inputFile = ugui.args.fileToProcess.value;
         var outputFile = path.join(appData, 'converted.png');
+        if (fs.existsSync(outputFile)) {
+            fs.unlinkSync(outputFile);
+        }
 
         // convert "C:\folder\cow.jpg" "C:\Users\Bob\AppData\Local\ugui_flif\converted.png"
         var executableAndArguments = convert + ' ' + inputFile + ' ' + outputFile;
