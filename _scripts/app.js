@@ -518,16 +518,21 @@ function runApp () {
         // Window height - Navbar - bottom border
         var newHeight = win.height - navHeight - 2;
         var settingsHeight = 0;
-        if (win.height > 300) {
+        if (win.height > 440) {
             $('#settingsModal .modal-header').removeClass('shortScreen');
+            $('#settingsModal .modal-footer').css('padding', '20px');
+            $('#settingsModal .modal-footer .btn').removeClass('btn-sm');
             settingsHeight = newHeight - 74;
         } else {
             $('#settingsModal .modal-header').addClass('shortScreen');
+            $('#settingsModal .modal-footer').css('padding', '5px');
+            $('#settingsModal .modal-footer .btn').addClass('btn-sm');
             settingsHeight = newHeight - 39;
         }
         $('#appHolder').css('height', newHeight + 'px');
         $('#settingsModal .modal-content').css('max-height', newHeight + 'px');
-        $('#settingsModal .modal-body').css('max-height', settingsHeight + 'px');
+        // modal-body height - modal-footer
+        $('#settingsModal .modal-body').css('max-height', (settingsHeight - 88) + 'px');
         window.setTimeout(ugui.helpers.centerNavLogo, 71);
     }
 
