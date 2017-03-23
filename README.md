@@ -1,6 +1,6 @@
-# UGUI: FLIF
+# UGUI: FLIF #
 
-#### [flif.info/UGUI_FLIF](http://flif.info/UGUI_FLIF)
+#### [flif.info/UGUI_FLIF](http://flif.info/UGUI_FLIF) ###
 
 **UGUI: FLIF is a viewer, encoder, and decoder of FLIF files.**
 
@@ -12,7 +12,7 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 * * *
 
-###Screenshots and Download
+### Screenshots and Download ###
 
 * https://github.com/FLIF-Hub/UGUI_FLIF/releases
 
@@ -20,7 +20,7 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 * * *
 
-###Links:
+### Links:
 
 * [UGUI: FLIF website](http://flif.info/UGUI_FLIF)
 * [UGUI website](http://ugui.io)
@@ -29,12 +29,12 @@ The first version was made in about half an hour using the [UGUI](http://ugui.io
 
 * * *
 
-##Contributing
+## Contributing
 
 See the README in the [dev](https://github.com/FLIF-hub/UGUI_FLIF/tree/dev) branch.
 
 * * *
 
-###Road map
+### Road map
 
 See the README in the [dev](https://github.com/FLIF-hub/UGUI_FLIF/tree/dev) branch.
